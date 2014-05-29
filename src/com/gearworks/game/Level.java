@@ -3,14 +3,14 @@ package com.gearworks.game;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.gearworks.Client;
+import com.gearworks.Game;
 
 public class Level {
 	private TiledMap tileMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
-	private Client game;
+	private Game game;
 	
-	public Level(Client game){
+	public Level(Game game){
 		this.game = game;
 	}
 	

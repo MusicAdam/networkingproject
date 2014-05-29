@@ -18,7 +18,7 @@ import com.gearworks.game.Entity;
 import com.gearworks.state.GameState;
 
 public class UserInterface implements InputProcessor{
-	private Client game;
+	private Game game;
 	
 	private ArrayList<Entity> selected;
 	private Vector2 dragStart;
@@ -30,11 +30,11 @@ public class UserInterface implements InputProcessor{
 	public static Vector2 mouseToScreen(Vector2 coord){
 		Vector2 screenCoord = coord.cpy();
 		screenCoord.x = coord.x;
-		screenCoord.y = Math.abs(coord.y - (Client.V_HEIGHT * Client.SCALE));
+		screenCoord.y = Math.abs(coord.y - (Game.V_HEIGHT * Game.SCALE));
 		return screenCoord;
 	}
 	
-	public UserInterface(Client game){
+	public UserInterface(Game game){
 		this.game = game;
 	}
 

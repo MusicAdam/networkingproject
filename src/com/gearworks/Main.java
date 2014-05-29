@@ -6,10 +6,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-		cfg.title = Client.TITLE;
-		cfg.width = Client.V_WIDTH * Client.SCALE;
-		cfg.height = Client.V_HEIGHT * Client.SCALE;
+		cfg.title = Game.TITLE;
+		cfg.width = Game.V_WIDTH * Game.SCALE;
+		cfg.height = Game.V_HEIGHT * Game.SCALE;
 		
-		new LwjglApplication(new Client(), cfg);
+		new LwjglApplication(new Game(), cfg);
 	} 
 }

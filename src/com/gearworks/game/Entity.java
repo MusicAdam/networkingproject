@@ -8,19 +8,19 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import com.gearworks.Client;
+import com.gearworks.Game;
 import com.gearworks.Utils;
 
 //Should be shared 
 public class Entity {	
-	public Client game;
+	public Game game;
 	
 	private Vector2 size;
 	private Vector2 position;
 	private boolean selectable = true;
 	private int x, y;									//Position in the grid
 	
-	public Entity(Client cRef){
+	public Entity(Game cRef){
 		game = cRef;
 		size = new Vector2();
 		position = new Vector2();

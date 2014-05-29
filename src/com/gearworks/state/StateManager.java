@@ -1,11 +1,11 @@
 package com.gearworks.state;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.gearworks.Client;
+import com.gearworks.Game;
 
 public class StateManager {
 	protected State state;
-	protected Client clientRef;
+	protected Game clientRef;
 	
 	//Compares state id's
 	public static boolean statesEqual(State state, State cState){
@@ -17,7 +17,7 @@ public class StateManager {
 		return false;
 	}
 	
-	public StateManager(Client clientRef){
+	public StateManager(Game clientRef){
 		this.clientRef = clientRef;
 	}
 	

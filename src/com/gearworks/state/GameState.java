@@ -9,14 +9,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.gearworks.Client;
+import com.gearworks.Game;
 import com.gearworks.game.Entity;
 
 public class GameState implements State {
 	private static int ID = 0;
 
 	@Override
-	public void render(Client game) {
+	public void render(Game game) {
 		game.batch().setProjectionMatrix(game.camera().combined);
 		game.batch().begin();
 		for(Entity ent : game.entities()){
@@ -26,29 +26,29 @@ public class GameState implements State {
 	}
 
 	@Override
-	public void update(Client game) {
+	public void update(Game game) {
 		for(Entity ent : game.entities()){
 			ent.update();
 		}
 	}
 
 	@Override
-	public void onEnter(Client game) {		
+	public void onEnter(Game game) {		
 		System.out.println("[GameState::onEnter]");
 	}
 
 	@Override
-	public void onExit(Client game) {
+	public void onExit(Game game) {
 		
 	}
 	
 	@Override
-	public boolean canEnterState(Client game) {
+	public boolean canEnterState(Game game) {
 		return true;
 	}
 
 	@Override
-	public boolean canExitState(Client game) {
+	public boolean canExitState(Game game) {
 		return false;
 	}
 	
