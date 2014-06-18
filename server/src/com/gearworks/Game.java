@@ -1,5 +1,6 @@
 package com.gearworks;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -14,14 +15,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Server;
 import com.gearworks.game.Entity;
+import com.gearworks.messages.TestMessage;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
 
 public class Game implements ApplicationListener {
-	public static final String 	TITLE = "Seek and Sneak";
+	public static final String 	TITLE = "Seek and Sneak - Server";
 	public static final int 	V_WIDTH = 800;
 	public static final	int 	V_HEIGHT = 600;
 	public static final float 	ASPECT_RATIO = (float)V_WIDTH/(float)V_HEIGHT;
@@ -47,8 +51,27 @@ public class Game implements ApplicationListener {
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	
+	private Server server;
+	
 	@Override
 	public void create() {	
+		//Setup Server
+		server = new Server();
+		
+		Kryo kryo = server.getKryo();
+		kryo.register(TestMessage.class);
+		
+		server.start();
+		try {
+			server.bind(60420, 60421);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		server.addListener(new ServerListener());
+	
+		
 		fpsLogger = new FPSLogger();
 		
 		entities = new ArrayList<Entity>();
