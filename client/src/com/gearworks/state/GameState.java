@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 import com.gearworks.game.Entity;
+import com.gearworks.game.Level;
 
 public class GameState implements State {
 	private static int ID = 0;
+	private Level level;
 
 	@Override
 	public void render(Game game) {
@@ -23,6 +25,8 @@ public class GameState implements State {
 			ent.render(game.batch(), game.renderer());
 		}
 		game.batch().end();
+		
+		level.render();
 	}
 
 	@Override
@@ -34,11 +38,15 @@ public class GameState implements State {
 
 	@Override
 	public void onEnter(Game game) {		
+		level = new Level(game);
+		level.load("assets/test.tmx");
+		
 		System.out.println("[GameState::onEnter]");
 	}
 
 	@Override
 	public void onExit(Game game) {
+		level.dispose();
 		
 	}
 	

@@ -18,8 +18,6 @@ public class Level {
 		tileMap = new TmxMapLoader().load(name);
 		mapRenderer = new OrthogonalTiledMapRenderer(tileMap);
 	}
-	
-	
 
 	public void render() {
 		if(mapRenderer == null) return;
@@ -29,6 +27,11 @@ public class Level {
 	}
 
 	public void update() {
+	}
+	
+	public void dispose(){
+		tileMap.dispose();
+		mapRenderer.dispose();
 	}
 	
 }

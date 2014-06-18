@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.gearworks.game.Entity;
+import com.gearworks.game.Level;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -108,7 +109,6 @@ public class Game implements ApplicationListener {
 			camera.update();
 		}
 		
-
 		sm.render();
 		ui.render(batch, renderer);
 		
