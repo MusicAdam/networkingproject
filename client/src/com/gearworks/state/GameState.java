@@ -43,7 +43,7 @@ public class GameState implements State {
 		level.load("assets/test.tmx");
 		
 		Character sneaker = new Character(game);
-		sneaker.cell(level.getSneakerSpawn());
+		sneaker.tile(level.getSneakerSpawn());
 		
 		System.out.println("[GameState::onEnter]");
 	}

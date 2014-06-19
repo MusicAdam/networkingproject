@@ -1,6 +1,8 @@
 package com.gearworks.game;
 
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -13,8 +15,8 @@ public class Level {
 	private TiledMap tileMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private Game game;
-	protected Array<TiledMapTileLayer.Cell> seekerSpawns;
-	protected TiledMapTileLayer.Cell sneakerSpawn;
+	protected Array<TiledMapTile> seekerSpawns;
+	protected TiledMapTile sneakerSpawn;
 	
 	public Level(Game game){
 		this.game = game;
@@ -23,6 +25,8 @@ public class Level {
 	public void load(String name){
 		tileMap = new TmxMapLoader().load(name);
 		mapRenderer = new OrthogonalTiledMapRenderer(tileMap);
+		
+		updateTilePositions();
 		
 		seekerSpawns = findSeekerSpawns();
 		sneakerSpawn = findSneakerSpawn();
@@ -47,8 +51,8 @@ public class Level {
 		return null;
 	}
 	
-	protected Array<TiledMapTileLayer.Cell> findSeekerSpawns(){
-		Array<TiledMapTileLayer.Cell> spawns = new Array<TiledMapTileLayer.Cell>();
+	protected Array<TiledMapTile> findSeekerSpawns(){
+		Array<TiledMapTile> spawns = new Array<TiledMapTile>();
 
 		TiledMapTileLayer layer;
 		if((layer = (TiledMapTileLayer) tileMap.getLayers().get(MAP_LAYER)) != null){
@@ -56,7 +60,7 @@ public class Level {
 				for(int y = 0; y < layer.getHeight(); y++){
 					TiledMapTileLayer.Cell cell = layer.getCell(x, y);
 					if(cell.getTile().getProperties().containsKey("seekerSpawn")){
-						spawns.add(cell);
+						spawns.add(cell.getTile());
 					}
 				}
 			}
@@ -65,14 +69,14 @@ public class Level {
 		return spawns;
 	}
 	
-	protected TiledMapTileLayer.Cell findSneakerSpawn(){
+	protected TiledMapTile findSneakerSpawn(){
 		TiledMapTileLayer layer;
 		if((layer = (TiledMapTileLayer) tileMap.getLayers().get(MAP_LAYER)) != null){
 			for(int x = 0; x < layer.getWidth(); x++){
 				for(int y = 0; y < layer.getHeight(); y++){
 					TiledMapTileLayer.Cell cell = layer.getCell(x, y);
 					if(cell.getTile().getProperties().containsKey("sneakerSpawn")){
-						return cell;
+						return cell.getTile();
 					}
 				}
 			}
@@ -81,11 +85,27 @@ public class Level {
 		return null;
 	}
 	
-	public Array<TiledMapTileLayer.Cell> getSeekerSpawns(){
+	//Calculates each tile's position in each tile layer and sets an x & y property containing the value
+	protected void updateTilePositions(){
+		for(MapLayer mapLayer : tileMap.getLayers()){
+			if(mapLayer instanceof TiledMapTileLayer){
+				TiledMapTileLayer tileLayer = (TiledMapTileLayer)mapLayer;
+				
+				for(int x = 0; x < tileLayer.getWidth(); x++){
+					for(int y = 0; y < tileLayer.getHeight(); y++){
+						tileLayer.getCell(x, y).getTile().getProperties().put("x", x * tileLayer.getTileWidth() + tileLayer.getTileWidth()/2);
+						tileLayer.getCell(x, y).getTile().getProperties().put("y", y * tileLayer.getTileHeight() + tileLayer.getTileHeight()/2);
+					}
+				}
+			}
+		}
+	}
+	
+	public Array<TiledMapTile> getSeekerSpawns(){
 		return seekerSpawns;
 	}
 	
-	public TiledMapTileLayer.Cell getSneakerSpawn(){
+	public TiledMapTile getSneakerSpawn(){
 		return sneakerSpawn;
 	}
 	
