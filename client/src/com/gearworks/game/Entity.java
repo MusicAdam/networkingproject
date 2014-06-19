@@ -18,7 +18,6 @@ public class Entity {
 	private Vector2 size;
 	private Vector2 position;
 	private boolean selectable = true;
-	private int x, y;									//Position in the grid
 	
 	public Entity(Game cRef){
 		game = cRef;
@@ -28,13 +27,6 @@ public class Entity {
 	
 	public Vector2 position(){
 		return position;
-	}
-	
-	public void putInCell(int x, int y){
-		//TODO: Should place this entity in cell[x, y] 
-		//TODO: Should update this.position
-		//		xPos = x * cellWidth + gridPosition.x
-		//		yPos = y * cellHeight + gridPosition.y
 	}
 	
 	public Vector2 rotation(){
