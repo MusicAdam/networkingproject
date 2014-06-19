@@ -41,6 +41,10 @@ public class Entity {
 		//		(0, -1) - Down
 	}
 	
+	public void position(float x, float y){
+		position = new Vector2(x,y);
+	}
+	
 	public void render(SpriteBatch batch, ShapeRenderer r){}
 	public void update(){}
 	
