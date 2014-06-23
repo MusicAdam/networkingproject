@@ -19,6 +19,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.gearworks.game.Entity;
 import com.gearworks.shared.*;
+import com.gearworks.game.Level;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -30,6 +31,7 @@ public class Game implements ApplicationListener {
 	public static final float 	ASPECT_RATIO = (float)V_WIDTH/(float)V_HEIGHT;
 	public static final int 	SCALE = 1;
 	public static final float 	ZOOM = 5;
+	
 	
 	public static final float STEP = 1 / 60f;
 	private float accum;
@@ -46,6 +48,7 @@ public class Game implements ApplicationListener {
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
 	private Client client;
+	private Level level;
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -127,7 +130,6 @@ public class Game implements ApplicationListener {
 			camera.update();
 		}
 		
-
 		sm.render();
 		ui.render(batch, renderer);
 		
@@ -182,6 +184,14 @@ public class Game implements ApplicationListener {
 	
 	public ArrayList<Entity> entities() {
 		return entities;
+	}
+	
+	public Level level(){
+		return level;
+	}
+	
+	public void level(Level level){
+		this.level = level;
 	}
 	
 	public OrthographicCamera camera(){ return camera; }
