@@ -7,6 +7,11 @@
     <property name="seekerSpawn" value=""/>
    </properties>
   </tile>
+  <tile id="4">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
   <tile id="5">
    <properties>
     <property name="sneakerSpawn" value=""/>

@@ -50,6 +50,14 @@ public class Level {
 		return null;
 	}
 	
+	public boolean isWall(int x, int y){
+		TiledMapTileLayer.Cell cell = getCell(Level.MAP_LAYER, x, y);
+		
+		if(cell == null) return true;//Treat null as a wall that way we don't accidentally try and reference null
+		
+		return cell.getTile().getProperties().containsKey("isWall");
+	}
+	
 	public Vector2 positionFromIndex(int x, int y){
 		TiledMapTileLayer layer;
 

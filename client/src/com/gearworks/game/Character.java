@@ -34,6 +34,8 @@ public class Character extends Entity {
 	}
 	
 	public void move(int x, int y){
+		if(game.level().isWall(x, y)) return;
+		
 		tile(x, y);
 	}
 	
