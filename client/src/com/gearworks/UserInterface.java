@@ -6,41 +6,83 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.gearworks.game.Entity;
 import com.gearworks.state.GameState;
+import com.gearworks.game.Character;
 
 public class UserInterface implements InputProcessor{
 	private Game game;
 	
-	private ArrayList<Entity> selected;
-	private Vector2 dragStart;
-	private Vector2 dragPos;
+	private Character activeCharacter;
+	private InputMapper inputMapper;
 	
 	float selectionPadding = 0f;
 	
 	//Takes a mouse coordinate and returns screen coordinates, does not alter original vector
-	public static Vector2 mouseToScreen(Vector2 coord){
-		Vector2 screenCoord = coord.cpy();
-		screenCoord.x = coord.x;
-		screenCoord.y = Math.abs(coord.y - (Game.V_HEIGHT * Game.SCALE));
-		return screenCoord;
+	public static Vector2 mouseToScreen(Vector2 coord, Camera camera){
+		Vector3 screenCoord = new Vector3(coord.x, coord.y, 0);
+		camera.unproject(screenCoord);
+		
+		return new Vector2(screenCoord.x, screenCoord.y);
 	}
 	
 	public UserInterface(Game game){
 		this.game = game;
+		inputMapper = new InputMapper();
+		
+		//Default mappings
+		inputMapper.put("up", Input.Keys.W);
+		inputMapper.put("up", Input.Keys.UP);
+		inputMapper.put("left", Input.Keys.A);
+		inputMapper.put("left", Input.Keys.LEFT);
+		inputMapper.put("right", Input.Keys.D);
+		inputMapper.put("right", Input.Keys.RIGHT);
+		inputMapper.put("down", Input.Keys.DOWN);
+		inputMapper.put("down", Input.Keys.S);
+		inputMapper.put("switchActive", Input.Keys.TAB);
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		return false;
+		if(inputMapper.getMapping(keycode) == "up"){
+			if(activeCharacter != null){
+				TiledMapTile tile = activeCharacter.tile();
+				activeCharacter.move((Integer)tile.getProperties().get("xIndex"), (Integer)tile.getProperties().get("yIndex") + 1);
+			}
+		}
+		
+		if(inputMapper.getMapping(keycode) == "left"){
+			if(activeCharacter != null){
+				TiledMapTile tile = activeCharacter.tile();
+				activeCharacter.move((Integer)tile.getProperties().get("xIndex") - 1, (Integer)tile.getProperties().get("yIndex"));
+			}
+		}
+		
+		if(inputMapper.getMapping(keycode) == "down"){
+			if(activeCharacter != null){
+				TiledMapTile tile = activeCharacter.tile();
+				activeCharacter.move((Integer)tile.getProperties().get("xIndex"), (Integer)tile.getProperties().get("yIndex") - 1);
+			}
+		}
+		
+		if(inputMapper.getMapping(keycode) == "right"){
+			if(activeCharacter != null){
+				TiledMapTile tile = activeCharacter.tile();
+				activeCharacter.move((Integer)tile.getProperties().get("xIndex") + 1, (Integer)tile.getProperties().get("yIndex"));
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -55,50 +97,16 @@ public class UserInterface implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(button == 0){
-			selected = null;
-		}
 		return true; //This could interfere with menus in the future, unless this class handles the clicks...
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		if(dragStart != null && dragPos != null){
-			//If the height is negative we want to swap dragStart.y and dragPos.y to flip the box so it is not upside down and picking will work
-			if(dragPos.y - dragStart.y < 0){
-				float tmp = dragPos.y;
-				dragPos.y = dragStart.y;
-				dragStart.y = tmp;
-			}
-			
-			//Do this for x axis as well
-			if(dragPos.x - dragStart.x < 0){
-				float tmp = dragPos.x;
-				dragPos.x = dragStart.x;
-				dragStart.x = tmp;
-			}
-			
-			Rectangle bounds = new Rectangle(	dragStart.x,
-												dragStart.y,
-												dragPos.x - dragStart.x,
-												dragPos.y - dragStart.y);
-			selected = Utils.selectEntitiesInBox(game.entities(), bounds);
-			
-			dragStart = null;
-			dragPos = null;
-		}
 		return true; //This could interfere with menus in the future, unless this class handles the clicks...
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-			if(dragStart == null)
-				dragStart = mouseToScreen(new Vector2(screenX, screenY));
-			
-			dragPos = mouseToScreen(new Vector2(screenX, screenY));
-		}
-		
 		return true;
 	}
 
@@ -115,14 +123,6 @@ public class UserInterface implements InputProcessor{
 	public void render(SpriteBatch batch, ShapeRenderer renderer){
 		renderer.setProjectionMatrix(game.camera().combined);
 		renderer.identity();
-		
-		//Draw the selection box
-		if(dragStart != null && dragPos != null){
-			float width = dragPos.x - dragStart.x;
-			float height = dragPos.y - dragStart.y;
-
-			Utils.drawRect(renderer, Color.RED, dragStart.x, dragStart.y, width, height);
-		}
 	}
 
 }

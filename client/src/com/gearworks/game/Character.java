@@ -11,14 +11,15 @@ public class Character extends Entity {
 		// TODO Auto-generated constructor stub
 	}
 
-	TiledMapTile myTile; 
+	TiledMapTile myTile;
+	
 	//Sets myCell
 	public void tile(TiledMapTile tile){
 		myTile = tile;
 		float x=0;
 		float y=0;
-		x= (float)myTile.getProperties().get("x");
-		y= (float)myTile.getProperties().get("y");
+		x= (Float)myTile.getProperties().get("x");
+		y= (Float)myTile.getProperties().get("y");
 		position(x,y);
 	}
 	

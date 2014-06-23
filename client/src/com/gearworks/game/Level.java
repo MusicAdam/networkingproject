@@ -26,7 +26,7 @@ public class Level {
 		tileMap = new TmxMapLoader().load(name);
 		mapRenderer = new OrthogonalTiledMapRenderer(tileMap);
 		
-		updateTilePositions();
+		initializeTiles();
 		
 		seekerSpawns = findSeekerSpawns();
 		sneakerSpawn = findSneakerSpawn();
@@ -86,19 +86,9 @@ public class Level {
 	}
 	
 	//Calculates each tile's position in each tile layer and sets an x & y property containing the value
-	protected void updateTilePositions(){
-		for(MapLayer mapLayer : tileMap.getLayers()){
-			if(mapLayer instanceof TiledMapTileLayer){
-				TiledMapTileLayer tileLayer = (TiledMapTileLayer)mapLayer;
-				
-				for(int x = 0; x < tileLayer.getWidth(); x++){
-					for(int y = 0; y < tileLayer.getHeight(); y++){
-						tileLayer.getCell(x, y).getTile().getProperties().put("x", x * tileLayer.getTileWidth() + tileLayer.getTileWidth()/2);
-						tileLayer.getCell(x, y).getTile().getProperties().put("y", y * tileLayer.getTileHeight() + tileLayer.getTileHeight()/2);
-					}
-				}
-			}
-		}
+	protected void updateTilePosition(TiledMapTile tile, TiledMapTileLayer tileLayer, int x, int y){
+		tile.getProperties().put("x", x * tileLayer.getTileWidth() + tileLayer.getTileWidth()/2);
+		tile.getProperties().put("y", y * tileLayer.getTileHeight() + tileLayer.getTileHeight()/2);
 	}
 	
 	public Array<TiledMapTile> getSeekerSpawns(){
@@ -107,6 +97,25 @@ public class Level {
 	
 	public TiledMapTile getSneakerSpawn(){
 		return sneakerSpawn;
+	}
+	
+	protected void initializeTiles(){
+		for(MapLayer mapLayer : tileMap.getLayers()){
+			if(mapLayer instanceof TiledMapTileLayer){
+				TiledMapTileLayer tileLayer = (TiledMapTileLayer)mapLayer;
+				
+				for(int x = 0; x < tileLayer.getWidth(); x++){
+					for(int y = 0; y < tileLayer.getHeight(); y++){
+						TiledMapTile tile = tileLayer.getCell(x, y).getTile();
+						
+						updateTilePosition(tile, tileLayer, x, y);
+						
+						tile.getProperties().put("xIndex", x);
+						tile.getProperties().put("yIndex", y);
+					}
+				}
+			}
+		}
 	}
 	
 	public void dispose(){
