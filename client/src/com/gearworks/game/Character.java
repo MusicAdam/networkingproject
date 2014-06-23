@@ -1,37 +1,47 @@
 package com.gearworks.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 
 public class Character extends Entity {
+	Texture myTexture;
+	int x, y;
 	
 	public Character(Game cRef) {
 		super(cRef);
-		// TODO Auto-generated constructor stub
+		myTexture = new Texture(Gdx.files.internal("assets/8x8person.png"));
+		size(8, 8);
 	}
-
-	TiledMapTile myTile;
 	
 	//Sets myCell
-	public void tile(TiledMapTile tile){
-		myTile = tile;
-		float x=0;
-		float y=0;
-		x= (Float)myTile.getProperties().get("x");
-		y= (Float)myTile.getProperties().get("y");
-		position(x,y);
+	public void tile(int x, int y){
+		this.x = x;
+		this.y = y;
+		
+		Vector2 position = game.level().positionFromIndex(x, y);
+		position(position);
 	}
 	
 	//Gets myCell
-	public TiledMapTile tile(){
-		return myTile;
+	public Vector2 index(){
+		return new Vector2(x, y);
 	}
 	
 	public void move(int x, int y){
-		TiledMapTile tile;
-		tile = game.level().getCell(Level.MAP_LAYER,x,y).getTile();
-		tile(tile);
+		tile(x, y);
+	}
+	
+	@Override
+	public void render(SpriteBatch b, ShapeRenderer r){
+		b.begin();
+			b.draw(myTexture, position().x, position().y);
+		b.end();
 	}
 	
 }

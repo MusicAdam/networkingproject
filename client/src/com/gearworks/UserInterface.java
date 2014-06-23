@@ -57,29 +57,29 @@ public class UserInterface implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		if(inputMapper.getMapping(keycode) == "up"){
 			if(activeCharacter != null){
-				TiledMapTile tile = activeCharacter.tile();
-				activeCharacter.move((Integer)tile.getProperties().get("xIndex"), (Integer)tile.getProperties().get("yIndex") + 1);
+				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
+				activeCharacter.move((int)index.x, (int)index.y + 1);
 			}
 		}
 		
 		if(inputMapper.getMapping(keycode) == "left"){
 			if(activeCharacter != null){
-				TiledMapTile tile = activeCharacter.tile();
-				activeCharacter.move((Integer)tile.getProperties().get("xIndex") - 1, (Integer)tile.getProperties().get("yIndex"));
+				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
+				activeCharacter.move((int)index.x - 1, (int)index.y);
 			}
 		}
 		
 		if(inputMapper.getMapping(keycode) == "down"){
 			if(activeCharacter != null){
-				TiledMapTile tile = activeCharacter.tile();
-				activeCharacter.move((Integer)tile.getProperties().get("xIndex"), (Integer)tile.getProperties().get("yIndex") - 1);
+				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
+				activeCharacter.move((int)index.x, (int)index.y - 1);
 			}
 		}
 		
 		if(inputMapper.getMapping(keycode) == "right"){
 			if(activeCharacter != null){
-				TiledMapTile tile = activeCharacter.tile();
-				activeCharacter.move((Integer)tile.getProperties().get("xIndex") + 1, (Integer)tile.getProperties().get("yIndex"));
+				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
+				activeCharacter.move((int)index.x + 1, (int)index.y);
 			}
 		}
 		return true;
@@ -97,6 +97,7 @@ public class UserInterface implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		Vector2 coord = mouseToScreen(new Vector2(screenX, screenY), game.camera());
 		return true; //This could interfere with menus in the future, unless this class handles the clicks...
 	}
 
@@ -124,5 +125,7 @@ public class UserInterface implements InputProcessor{
 		renderer.setProjectionMatrix(game.camera().combined);
 		renderer.identity();
 	}
+	
+	public void activeCharacter(Character c){ activeCharacter = c; }
 
 }
