@@ -19,7 +19,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.game.Entity;
-import com.gearworks.messages.TestMessage;
+import com.gearworks.shared.*;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -46,7 +46,8 @@ public class Game implements ApplicationListener {
 	private InputMultiplexer inputMultiplexer;
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
-	private Client client;
+	private Player player1;
+	private Player player2;
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -59,7 +60,7 @@ public class Game implements ApplicationListener {
 		server = new Server();
 		
 		Kryo kryo = server.getKryo();
-		kryo.register(TestMessage.class);
+		kryo.register(Message.class);
 		
 		server.start();
 		try {
@@ -69,8 +70,8 @@ public class Game implements ApplicationListener {
 			e.printStackTrace();
 		}
 		
-		server.addListener(new ServerListener());
-	
+		server.addListener(new ServerListener(server));
+		
 		
 		fpsLogger = new FPSLogger();
 		

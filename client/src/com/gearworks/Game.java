@@ -18,7 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.gearworks.game.Entity;
-import com.gearworks.messages.TestMessage;
+import com.gearworks.shared.*;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -83,7 +83,7 @@ public class Game implements ApplicationListener {
 		client = new Client();
 		
 		Kryo kryo = client.getKryo();
-		kryo.register(TestMessage.class);
+		kryo.register(Message.class);
 		
 		client.start();
 		try {
@@ -92,9 +92,6 @@ public class Game implements ApplicationListener {
 			e.printStackTrace();
 		}
 		client.addListener(new ClientListener());
-		TestMessage tm = new TestMessage();
-		tm.test = "catgifs are life";
-		client.sendTCP(tm);
 		
 	}
 
