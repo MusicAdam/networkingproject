@@ -29,6 +29,7 @@ public class Game implements ApplicationListener {
 	public static final int 	SCALE = 1;
 	public static final float 	ZOOM = 5;
 	
+	
 	public static final float STEP = 1 / 60f;
 	private float accum;
 	
@@ -44,6 +45,7 @@ public class Game implements ApplicationListener {
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
 	private Client client;
+	private Level level;
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -163,6 +165,14 @@ public class Game implements ApplicationListener {
 	
 	public ArrayList<Entity> entities() {
 		return entities;
+	}
+	
+	public Level level(){
+		return level;
+	}
+	
+	public void level(Level level){
+		this.level = level;
 	}
 	
 	public OrthographicCamera camera(){ return camera; }

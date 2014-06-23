@@ -17,9 +17,8 @@ public class Character extends Entity {
 		myTile = tile;
 		float x=0;
 		float y=0;
-		System.out.println(myTile.getProperties().get("x"));
-		System.out.println(myTile.getProperties().get("y"));
-		//needs to set the character in the center of the cell
+		x= (float)myTile.getProperties().get("x");
+		y= (float)myTile.getProperties().get("y");
 		position(x,y);
 	}
 	
@@ -28,5 +27,10 @@ public class Character extends Entity {
 		return myTile;
 	}
 	
+	public void move(int x, int y){
+		TiledMapTile tile;
+		tile = game.level().getCell(Level.MAP_LAYER,x,y).getTile();
+		tile(tile);
+	}
 	
-} 
+}

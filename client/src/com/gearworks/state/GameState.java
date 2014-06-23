@@ -16,7 +16,7 @@ import com.gearworks.game.Character;
 
 public class GameState implements State {
 	private static int ID = 0;
-	private Level level;
+	
 
 	@Override
 	public void render(Game game) {
@@ -27,7 +27,7 @@ public class GameState implements State {
 		}
 		game.batch().end();
 		
-		level.render();
+		game.level().render();
 	}
 
 	@Override
@@ -39,18 +39,18 @@ public class GameState implements State {
 
 	@Override
 	public void onEnter(Game game) {		
-		level = new Level(game);
-		level.load("assets/test.tmx");
+		game.level(new Level(game));
+		game.level().load("assets/test.tmx");
 		
 		Character sneaker = new Character(game);
-		sneaker.tile(level.getSneakerSpawn());
+		sneaker.tile(game.level().getSneakerSpawn());
 		
 		System.out.println("[GameState::onEnter]");
 	}
 
 	@Override
 	public void onExit(Game game) {
-		level.dispose();
+		game.level().dispose();
 		
 	}
 	
@@ -66,5 +66,6 @@ public class GameState implements State {
 	
 	@Override
 	public int getId(){ return ID; }
+
 
 }
