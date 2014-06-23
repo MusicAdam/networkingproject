@@ -1,5 +1,6 @@
 package com.gearworks;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -14,8 +15,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.gearworks.game.Entity;
+import com.gearworks.shared.*;
 import com.gearworks.game.Level;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
@@ -77,6 +80,22 @@ public class Game implements ApplicationListener {
 		
 		batch = new SpriteBatch();	
 		renderer = new ShapeRenderer();
+		
+		
+		//Client setup
+		client = new Client();
+		
+		Kryo kryo = client.getKryo();
+		kryo.register(Message.class);
+		
+		client.start();
+		try {
+			client.connect(5000, "10.34.23.26", 60420, 60421);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		client.addListener(new ClientListener());
+		
 	}
 
 	@Override
