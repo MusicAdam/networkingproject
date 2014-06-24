@@ -1,0 +1,12 @@
+package com.gearworks;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+
+public class ClientListener extends Listener{
+	
+	public void received (Connection connection, Object object){
+		//TODO this
+		System.out.println("I recieved the message yo");
+	}
+
+}
