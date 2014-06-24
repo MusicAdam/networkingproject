@@ -19,7 +19,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.gearworks.game.Entity;
 import com.gearworks.shared.*;
-import com.gearworks.game.Level;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;

@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 import com.gearworks.game.Entity;
-import com.gearworks.game.Level;
-import com.gearworks.game.Character;
+import com.gearworks.shared.Character;
+import com.gearworks.shared.Level;
 
 public class GameState implements State {
 	private static int ID = 0;

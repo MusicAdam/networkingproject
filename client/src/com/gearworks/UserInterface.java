@@ -18,8 +18,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.gearworks.game.Entity;
+import com.gearworks.shared.Character;
 import com.gearworks.state.GameState;
-import com.gearworks.game.Character;
 
 public class UserInterface implements InputProcessor{
 	private Game game;

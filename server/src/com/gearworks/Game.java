@@ -20,6 +20,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.game.Entity;
 import com.gearworks.shared.*;
+import com.gearworks.shared.Character;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -46,8 +47,10 @@ public class Game implements ApplicationListener {
 	private InputMultiplexer inputMultiplexer;
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
-	private Player player1;
-	private Player player2;
+	private Level level;
+	private Player[] players; 			//This is the list of players
+	private Player activePlayer;		//This player is the active player aka the one who's turn it is
+	private Player inactivePlayer;		//Sure is
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -70,8 +73,7 @@ public class Game implements ApplicationListener {
 			e.printStackTrace();
 		}
 		
-		server.addListener(new ServerListener(server));
-		
+		server.addListener(new ServerListener(server, this));
 		
 		fpsLogger = new FPSLogger();
 		
@@ -193,4 +195,41 @@ public class Game implements ApplicationListener {
 	public State state(){ return sm.state(); }
 	public SpriteBatch batch() { return batch; }	
 	public ShapeRenderer renderer() { return renderer; }
+	
+	public boolean checkVictory(){
+		for(Character v : players[0].characters()){
+			for(Character q : players[1].characters()){
+				if(v.index().equals(q.index())){
+					//The Seeker wins (if overlap, seeker autowins)
+					return true;
+				}
+			}
+		}
+		return false;
+		
+	}
+
+	public Level level() {
+		return level;
+	}
+
+	public void level(Level level) {
+		this.level = level;
+	}
+
+	public Player activePlayer() {
+		return activePlayer;
+	}
+
+	public void activePlayer(Player activePlayer) {
+		this.activePlayer = activePlayer;
+	}
+
+	public Player inactivePlayer() {
+		return inactivePlayer;
+	}
+
+	public void inactivePlayer(Player inactivePlayer) {
+		this.inactivePlayer = inactivePlayer;
+	}
 }

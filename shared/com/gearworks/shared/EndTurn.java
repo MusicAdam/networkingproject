@@ -1,5 +1,7 @@
 package com.gearworks.shared;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.math.Vector2;
 
 /*
@@ -12,11 +14,23 @@ import com.badlogic.gdx.math.Vector2;
 
 public class EndTurn extends Message {
 	
-	public EndTurn(Vector2 positions){
-		
-		//TODO write the part where anything happens
+	ArrayList<Vector2> positions;
+	
+	
+
+	public EndTurn(ArrayList<Vector2> pos){
+		//I guess all this needs is the positions of the units
+		for(Vector2 v : pos){
+			positions.add(v);
+		}
 		
 	}
-	
-	
+	public ArrayList<Vector2> positions() {
+		return positions;
+	}
+
+	public void positions(ArrayList<Vector2> positions) {
+		this.positions = positions;
+	}
+		
 }

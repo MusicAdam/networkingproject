@@ -1,4 +1,4 @@
-package com.gearworks.game;
+package com.gearworks.shared;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
+import com.gearworks.game.Entity;
 
 public class Character extends Entity {
 	Texture myTexture;
@@ -36,7 +37,7 @@ public class Character extends Entity {
 	public void move(int x, int y){
 		if(game.level().isWall(x, y)) return;
 		
-		tile(x, y);
+		tile(x, y); //sets tile
 	}
 	
 	@Override
