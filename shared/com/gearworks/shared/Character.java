@@ -11,10 +11,12 @@ import com.gearworks.Game;
 
 public class Character extends Entity {
 	Texture myTexture;
+	Player player;
 	int x, y;
 	
-	public Character(Game cRef) {
+	public Character(Player player, Game cRef) {
 		super(cRef);
+		this.player = player;
 		myTexture = new Texture(Gdx.files.internal("assets/person.png"));
 		size(32, 32);
 	}
@@ -37,6 +39,7 @@ public class Character extends Entity {
 		if(game.level().isWall(x, y)) return;
 		
 		tile(x, y); //sets tile
+		game.level().calculateLighting(player);
 	}
 	
 	@Override

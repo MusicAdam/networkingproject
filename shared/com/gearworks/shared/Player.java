@@ -27,7 +27,7 @@ public class Player {
 	
 	public void spawnCharacters(Game game){
 		if(team == Team.Sneeker){
-			Character sneeker = (Character)game.spawn(new Character(game));
+			Character sneeker = (Character)game.spawn(new Character(this, game));
 			sneeker.tile((int)game.level().getSneakerSpawn().x, (int)game.level().getSneakerSpawn().y);
 			characters.add(sneeker);
 		}else{

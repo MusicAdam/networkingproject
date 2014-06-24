@@ -202,15 +202,12 @@ public class Level {
 		
 		for(int x = 0; x < mapWidth; x++){
 			for(int y = 0; y < mapHeight; y++){
-				for(Vector2 visible : visibleCells){
-					if(visible.x != x && visible.y != y){
-						hiddenCells.add(new Vector2(x, y));
-					}
+				Vector2 cell = new Vector2(x, y);
+				if(!visibleCells.contains(cell, false)){
+					hiddenCells.add(cell);
 				}
 			}
 		}
-		
-		System.out.println(visibleCells.size);
 	}
 	
 	//Recieves hidden cells from the server and stores it locally
