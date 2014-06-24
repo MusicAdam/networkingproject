@@ -52,6 +52,7 @@ public class Game implements ApplicationListener {
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
+	private Player player;
 	
 	@Override
 	public void create() {	
@@ -199,4 +200,6 @@ public class Game implements ApplicationListener {
 	public SpriteBatch batch() { return batch; }	
 	public ShapeRenderer renderer() { return renderer; }
 	public UserInterface ui(){ return ui; }
+	public Player player(){ return player; }
+	public void player(Player pl){ player = pl; }
 }

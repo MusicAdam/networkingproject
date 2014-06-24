@@ -46,8 +46,8 @@ public class Game implements ApplicationListener {
 	private InputMultiplexer inputMultiplexer;
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
-	private Player player1;
-	private Player player2;
+	private Player player;
+	private boolean active;
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -193,4 +193,6 @@ public class Game implements ApplicationListener {
 	public State state(){ return sm.state(); }
 	public SpriteBatch batch() { return batch; }	
 	public ShapeRenderer renderer() { return renderer; }
+	public void setActive(){ active = true; }
+	public boolean isActive(){ return active; }
 }

@@ -66,6 +66,7 @@ public class UserInterface implements InputProcessor{
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x - 1, (int)index.y);
+				game.level().calculateLighting(game.player());
 			}
 		}
 		

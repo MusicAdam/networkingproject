@@ -1,5 +1,9 @@
 package com.gearworks.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -9,18 +13,26 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
+import com.gearworks.shared.Player;
+import com.gearworks.shared.Utils;
 
 public class Level {
 	public static final String MAP_LAYER = "map";
+	public static final int	   TILE_SIZE = 32;
 	
 	private TiledMap tileMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private Game game;
 	protected Array<TiledMapTile> seekerSpawns;
 	protected Vector2 sneakerSpawn;
+	protected Array<Vector2> hiddenCells;
+	protected Vector2[] visibleEnemies;
+	protected int mapWidth;
+	protected int mapHeight;
 	
 	public Level(Game game){
 		this.game = game;
+		visibleEnemies 	= null;
 	}
 	
 	public void load(String name){
@@ -29,13 +41,29 @@ public class Level {
 		
 		seekerSpawns = findSeekerSpawns();
 		sneakerSpawn = findSneakerSpawn();
+		
+
+		TiledMapTileLayer layer;
+		if((layer = (TiledMapTileLayer) tileMap.getLayers().get(MAP_LAYER)) != null){
+			mapWidth = layer.getWidth();
+			mapHeight = layer.getHeight();
+		}
 	}
 
-	public void render() {
+	public void render(ShapeRenderer r) {
 		if(mapRenderer == null) return;
 				
 		mapRenderer.setView(game.camera());
 		mapRenderer.render();
+		
+		Gdx.gl.glEnable(GL20.GL_BLEND); //Need to enable blending for alpha rendering
+		
+		for(Vector2 cell : hiddenCells){
+			Vector2 pos = positionFromIndex((int)cell.x, (int)cell.y);
+			Utils.fillRect(r, new Color(0, 0, 0, .5f), pos.x, pos.y, TILE_SIZE, TILE_SIZE);
+		}
+		
+		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 
 	public void update() {
@@ -89,8 +117,10 @@ public class Level {
 			for(int x = 0; x < layer.getWidth(); x++){
 				for(int y = 0; y < layer.getHeight(); y++){
 					TiledMapTileLayer.Cell cell = layer.getCell(x, y);
-					if(cell.getTile().getProperties().containsKey("seekerSpawn")){
-						spawns.add(cell.getTile());
+					if(cell != null){
+						if(cell.getTile().getProperties().containsKey("seekerSpawn")){
+							spawns.add(cell.getTile());
+						}
 					}
 				}
 			}
@@ -105,8 +135,10 @@ public class Level {
 			for(int x = 0; x < layer.getWidth(); x++){
 				for(int y = 0; y < layer.getHeight(); y++){
 					TiledMapTileLayer.Cell cell = layer.getCell(x, y);
-					if(cell.getTile().getProperties().containsKey("sneakerSpawn")){
-						return new Vector2(x, y);
+					if(cell != null){
+						if(cell.getTile().getProperties().containsKey("sneakerSpawn")){
+							return new Vector2(x, y);
+						}
 					}
 				}
 			}
@@ -119,6 +151,69 @@ public class Level {
 	protected void updateTilePosition(TiledMapTile tile, TiledMapTileLayer tileLayer, int x, int y){
 		tile.getProperties().put("x", x * tileLayer.getTileWidth() + tileLayer.getTileWidth()/2);
 		tile.getProperties().put("y", y * tileLayer.getTileHeight() + tileLayer.getTileHeight()/2);
+	}
+	
+	//Should only be called serverside 
+	public void calculateLighting(Player player){
+		hiddenCells = new Array<Vector2>();
+		Array<Vector2> visibleCells = new Array<Vector2>();
+		for(Character c : player.characters()){
+			Vector2 index = c.index();
+
+			//Handle seeker vision
+			if(player.team() == Player.Team.Sneeker){
+				int pos = 1;
+				
+				//Calculate cells up
+				while(!isWall((int)index.x, (int)index.y + pos)){
+					visibleCells.add(new Vector2(index.x, index.y + pos));
+					pos++;
+				}
+				
+				pos = 1;
+				
+				//Calculate cells down
+				while(!isWall((int)index.x, (int)index.y - pos)){
+					visibleCells.add(new Vector2(index.x, index.y - pos));
+					pos++;
+				}
+				
+				pos = 1;
+				
+				//Calculate cells left
+				while(!isWall((int)index.x - pos, (int)index.y)){
+					visibleCells.add(new Vector2(index.x - pos, index.y));
+					pos++;
+				}
+				
+				pos = 1;
+				
+				//Calculate cells right
+				while(!isWall((int)index.x + pos, (int)index.y)){
+					visibleCells.add(new Vector2(index.x + pos, index.y));
+					pos++;
+				}
+			}else{ //Handle sneaker vision
+				
+			}
+		}
+		
+		for(int x = 0; x < mapWidth; x++){
+			for(int y = 0; y < mapHeight; y++){
+				for(Vector2 visible : visibleCells){
+					if(visible.x != x && visible.y != y){
+						hiddenCells.add(new Vector2(x, y));
+					}
+				}
+			}
+		}
+		
+		System.out.println(visibleCells.size);
+	}
+	
+	//Recieves hidden cells from the server and stores it locally
+	public void updateHiddenCells(Array<Vector2> hiddenCells){
+		this.hiddenCells = hiddenCells;
 	}
 	
 	public Array<TiledMapTile> getSeekerSpawns(){

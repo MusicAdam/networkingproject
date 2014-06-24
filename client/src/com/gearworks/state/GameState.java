@@ -13,6 +13,7 @@ import com.gearworks.Game;
 import com.gearworks.game.Entity;
 import com.gearworks.game.Level;
 import com.gearworks.game.Character;
+import com.gearworks.shared.Player;
 
 public class GameState implements State {
 	private static int ID = 0;
@@ -20,7 +21,7 @@ public class GameState implements State {
 
 	@Override
 	public void render(Game game) {
-		game.level().render();
+		game.level().render(game.renderer());
 		
 		for(Entity ent : game.entities()){
 			ent.render(game.batch(), game.renderer());
@@ -38,11 +39,14 @@ public class GameState implements State {
 	@Override
 	public void onEnter(Game game) {		
 		game.level(new Level(game));
-		game.level().load("assets/test.tmx");
+		game.level().load("assets/map1.tmx");
 		
-		Character sneaker = (Character)game.spawn(new Character(game));
-		sneaker.tile((int)game.level().getSneakerSpawn().x, (int)game.level().getSneakerSpawn().y);
-		game.ui().activeCharacter(sneaker);
+		Player pl = new Player(0, Player.Team.Sneeker);
+		pl.spawnCharacters(game);
+		game.ui().activeCharacter(pl.characters().first());
+		game.player(pl);
+		
+		game.level().calculateLighting(pl);
 		
 		System.out.println("[GameState::onEnter]");
 	}

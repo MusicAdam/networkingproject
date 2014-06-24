@@ -15,8 +15,8 @@ public class Character extends Entity {
 	
 	public Character(Game cRef) {
 		super(cRef);
-		myTexture = new Texture(Gdx.files.internal("assets/8x8person.png"));
-		size(8, 8);
+		myTexture = new Texture(Gdx.files.internal("assets/person.png"));
+		size(32, 32);
 	}
 	
 	//Sets myCell
