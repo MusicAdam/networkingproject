@@ -20,14 +20,12 @@ public class GameState implements State {
 
 	@Override
 	public void render(Game game) {
-		game.batch().setProjectionMatrix(game.camera().combined);
-		game.batch().begin();
+		game.level().render();
+		
 		for(Entity ent : game.entities()){
 			ent.render(game.batch(), game.renderer());
 		}
-		game.batch().end();
 		
-		game.level().render();
 	}
 
 	@Override
@@ -36,14 +34,15 @@ public class GameState implements State {
 			ent.update();
 		}
 	}
-
+	
 	@Override
 	public void onEnter(Game game) {		
 		game.level(new Level(game));
 		game.level().load("assets/test.tmx");
 		
-		Character sneaker = new Character(game);
-		sneaker.tile(game.level().getSneakerSpawn());
+		Character sneaker = (Character)game.spawn(new Character(game));
+		sneaker.tile((int)game.level().getSneakerSpawn().x, (int)game.level().getSneakerSpawn().y);
+		game.ui().activeCharacter(sneaker);
 		
 		System.out.println("[GameState::onEnter]");
 	}

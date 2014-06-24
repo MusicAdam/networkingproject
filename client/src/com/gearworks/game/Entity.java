@@ -29,6 +29,8 @@ public class Entity {
 		return position;
 	}
 	
+	public void position(Vector2 p){ position = p; }
+	
 	public Vector2 rotation(){
 		return new Vector2();
 	}

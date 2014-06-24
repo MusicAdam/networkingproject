@@ -198,4 +198,5 @@ public class Game implements ApplicationListener {
 	public State state(){ return sm.state(); }
 	public SpriteBatch batch() { return batch; }	
 	public ShapeRenderer renderer() { return renderer; }
+	public UserInterface ui(){ return ui; }
 }
