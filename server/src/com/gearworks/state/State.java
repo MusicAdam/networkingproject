@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gearworks.Game;
-import com.gearworks.game.Entity;
 
 public interface State {
 	public void render(Game game);

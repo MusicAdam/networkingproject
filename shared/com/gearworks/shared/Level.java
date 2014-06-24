@@ -1,4 +1,4 @@
-package com.gearworks.game;
+package com.gearworks.shared;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -23,7 +23,7 @@ public class Level {
 	private TiledMap tileMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
 	private Game game;
-	protected Array<TiledMapTile> seekerSpawns;
+	protected Array<Vector2> seekerSpawns;
 	protected Vector2 sneakerSpawn;
 	protected Array<Vector2> hiddenCells;
 	protected Vector2[] visibleEnemies;
@@ -86,6 +86,7 @@ public class Level {
 		return cell.getTile().getProperties().containsKey("isWall");
 	}
 	
+	
 	public Vector2 positionFromIndex(int x, int y){
 		TiledMapTileLayer layer;
 
@@ -109,17 +110,18 @@ public class Level {
 		return null;
 	}
 	
-	protected Array<TiledMapTile> findSeekerSpawns(){
-		Array<TiledMapTile> spawns = new Array<TiledMapTile>();
+	protected Array<Vector2> findSeekerSpawns(){
+		Array<Vector2> spawns = new Array<Vector2>();
 
 		TiledMapTileLayer layer;
 		if((layer = (TiledMapTileLayer) tileMap.getLayers().get(MAP_LAYER)) != null){
 			for(int x = 0; x < layer.getWidth(); x++){
 				for(int y = 0; y < layer.getHeight(); y++){
 					TiledMapTileLayer.Cell cell = layer.getCell(x, y);
+					
 					if(cell != null){
 						if(cell.getTile().getProperties().containsKey("seekerSpawn")){
-							spawns.add(cell.getTile());
+							spawns.add(new Vector2(x,y));
 						}
 					}
 				}
@@ -215,8 +217,8 @@ public class Level {
 	public void updateHiddenCells(Array<Vector2> hiddenCells){
 		this.hiddenCells = hiddenCells;
 	}
-	
-	public Array<TiledMapTile> getSeekerSpawns(){
+
+	public Array<Vector2> getSeekerSpawns(){
 		return seekerSpawns;
 	}
 	

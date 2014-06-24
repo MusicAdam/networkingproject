@@ -164,7 +164,7 @@
  </tileset>
  <layer name="map" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJzllEEPgjAMhatAFIw6gnDwrhf////zLdmSZ7OyMY4u+QJNt6Z9XedE5LGDRX7XBD4rvDP+yYh3AEfQBLtV51pjnxXvBM6gD/YMuvA/gsHYZ8W7ghu4Z+rT+6x4GqfyWzbqx2cc1ReZlb/LxPNc1Ff3JeUvrTfm/KRcttTLuaRysvxr+kXNWCvuD/tL9NP6p+5f7XxY1M6Hdf9q54P7wHbtfHheROl98brvef8G+e/1BXJtH9s=
+   eJyVVEEOgzAM62Fc1gsTA8Q2juzC//83KsWSZbmFHayS0MaJk7ZPKT0JH7H/wXRgOLAT1Aa+Fb+exfkl1iz2I3jxXfLowr7JyvHOeJ1/DH3ulXiFf5YcClayOV/lGmSvQ0/8nBdiZuJ5S3zosJAvV3icX+ttabkYLuTfmXjIl/PU7934NR+21+jFizhZK8RgTUeT3xb5YY9qMwYPeq/92SPG2fypVgo3O6iRZ0Y14zp1tly9yguOifap9q5PHA//nY668p7avFy5xw61eandUX1DWEv0fDLxdEZgY1b4DdH92cQ7uw/bBV0G4gfm1H7TW/9LDT8ySS+/
   </data>
  </layer>
 </map>

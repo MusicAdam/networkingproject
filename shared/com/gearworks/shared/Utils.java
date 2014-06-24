@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.gearworks.game.Entity;
 
 public class Utils {
 	public static float PI 				= (float)Math.PI;

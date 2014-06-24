@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
-import com.gearworks.game.Entity;
+import com.gearworks.shared.Entity;
 
 public class GameState implements State {
 	private static int ID = 0;

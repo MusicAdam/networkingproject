@@ -2,7 +2,7 @@ package com.gearworks.shared;
 
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
-import com.gearworks.game.Character;
+import com.gearworks.shared.Character;
 
 public class Player {
 	
