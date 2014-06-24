@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32">
+  <image source="tileset.png" width="192" height="192"/>
+  <tile id="0">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="seekerSpawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="sneakerSpawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="isWall" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="map" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztlNkKgCAQRafF9sWKeu3//7IZUBCXUrGHoAsHRPQ4LjgBwJKIDeGQLvz3ve6bEaa05T3G+lzzKJOylo9vRzIkFxSar0OOwPoqpBY0isdV91N9Np9MGeij9MggGEUfnRvdSxtRny2x+6Xoe7qLj28F8x9hjrEh7++0kNIHYDq/8B/YzjsWeo8Xi9YH/w==
+  </data>
+ </layer>
+</map>
