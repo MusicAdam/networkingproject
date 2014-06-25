@@ -86,17 +86,22 @@ public class Game implements ApplicationListener {
 		client = new Client();
 		
 		Kryo kryo = client.getKryo();
-		kryo.register(Message.class);
+		kryo.register(ConnectMessage.class);
+		kryo.register(ConnectedMessage.class);
+		kryo.register(StartTurn.class);
+		kryo.register(EndTurn.class);
+		kryo.register(InvalidMove.class);
 		
 		client.start();
-		/*
+		
 		try {
-			client.connect(5000, "10.34.23.26", 60420, 60421);
+			client.connect(5000, "localhost", 60420, 60421);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		client.addListener(new ClientListener());
-		*/
+		client.addListener(new ClientListener(this, client));
+		
+		client.sendTCP(new ConnectMessage());
 		
 	}
 
