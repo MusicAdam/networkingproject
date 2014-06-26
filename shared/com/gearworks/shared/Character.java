@@ -47,7 +47,6 @@ public class Character extends Entity {
 	@Override
 	public void render(SpriteBatch b, ShapeRenderer r){
 		b.begin();
-		
 			b.draw(myTexture, position().x, position().y);
 		b.end();
 	}

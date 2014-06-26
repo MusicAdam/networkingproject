@@ -18,8 +18,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.gearworks.game.Gui;
-import com.gearworks.game.Label;
+import com.gearworks.gui.GuiElement;
+import com.gearworks.gui.Label;
 import com.gearworks.shared.*;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
@@ -54,7 +54,7 @@ public class Game implements ApplicationListener {
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	private Player player;
-	private Gui gui;
+	private GuiElement gui;
 	
 	@Override
 	public void create() {	
@@ -109,7 +109,8 @@ public class Game implements ApplicationListener {
 
 		//GUI
 		//gui = new Gui();
-		spawn(new Label(this));
+		//Label l = (Label)spawn(new Label(this));
+		//l.position(100, 100);
 		
 	}
 
@@ -196,8 +197,8 @@ public class Game implements ApplicationListener {
 		if(ui == null){
 			camera.position.set(new Vector3());
 		}else if(ui.activeCharacter() != null){
-			camera.position.set(camera.position.x + (ui.activeCharacter().position().x - camera.position.x )/8, 
-								camera.position.y + (ui.activeCharacter().position().y  -camera.position.y)/8, 
+			camera.position.set(camera.position.x + (ui.activeCharacter().position().x + ui.activeCharacter().size().x/2 - camera.position.x )/8, 
+								camera.position.y + (ui.activeCharacter().position().y + ui.activeCharacter().size().x/2 - camera.position.y)/8, 
 								camera.position.z);
 		}
 	}
