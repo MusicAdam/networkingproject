@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 
 public class Character extends Entity {
+	public static final int SNEAKER_RADIUS = 5;
+	
 	Texture myTexture;
 	Player player;
 	int x, y;

@@ -1,5 +1,6 @@
 package com.gearworks.shared;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
 import com.gearworks.shared.Character;
@@ -31,7 +32,11 @@ public class Player {
 			sneeker.tile((int)game.level().getSneakerSpawn().x, (int)game.level().getSneakerSpawn().y);
 			characters.add(sneeker);
 		}else{
-			
+			for(Vector2 index : game.level().getSeekerSpawns()){
+				Character seeker = (Character) game.spawn(new Character(this, game));
+				seeker.tile((int)index.x, (int)index.y);
+				characters.add(seeker);
+			}
 		}
 	}
 	

@@ -50,7 +50,7 @@ public class UserInterface implements InputProcessor{
 		inputMapper.put("right", Input.Keys.RIGHT);
 		inputMapper.put("down", Input.Keys.DOWN);
 		inputMapper.put("down", Input.Keys.S);
-		inputMapper.put("switchActive", Input.Keys.TAB);
+		inputMapper.put("cycle", Input.Keys.TAB);
 	}
 
 	@Override
@@ -80,6 +80,27 @@ public class UserInterface implements InputProcessor{
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x + 1, (int)index.y);
+			}
+		}
+		
+		if(inputMapper.getMapping(keycode) == "cycle"){
+			if(activeCharacter == null){
+				activeCharacter = game.player().characters().first();
+			}else{
+				int index = -1; //Will be set to the index of the active character
+				
+				for(int i = 0; i < game.player().characters().size; i++){
+					if(game.player().characters().get(i).equals(activeCharacter)){
+						index = i + 1; //Use the next index so we get the next character in the array
+						break;
+					}
+				}
+				
+				if(index == -1 || index >= game.player().characters().size){ //If index is out of bounds
+					activeCharacter = game.player().characters().first(); //Default to first character
+				}else{
+					activeCharacter = game.player().characters().get(index); //Get the index we found
+				}
 			}
 		}
 		return true;

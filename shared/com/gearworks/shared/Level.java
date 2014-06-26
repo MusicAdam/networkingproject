@@ -163,7 +163,7 @@ public class Level {
 			Vector2 index = c.index();
 
 			//Handle seeker vision
-			if(player.team() == Player.Team.Sneeker){
+			if(player.team() == Player.Team.Seeker){
 				int pos = 1;
 				
 				//Calculate cells up
@@ -196,7 +196,25 @@ public class Level {
 					pos++;
 				}
 			}else{ //Handle sneaker vision
+				//x^2 + y^2 = r
+				//x = sqrt(r-y^2)
+				//y = sqrt(r-x^2)
 				
+				float rsquared = (float) Math.pow(Character.SNEAKER_RADIUS, 2);
+				
+				//This isn't very efficient, have to iterate whole map twice (once here then once to invert)
+				for(int x = 0; x < mapWidth; x++){
+					for(int y = 0; y < mapHeight; y++){
+						int cx1 = (int)index.x + (int)Math.floor(Math.sqrt(rsquared - Math.pow(y - index.y, 2)));
+						int cx2 = (int)index.x - (int)Math.floor(Math.sqrt(rsquared - Math.pow(y - index.y, 2)));
+						int cy1 = (int)index.y + (int)Math.floor(Math.sqrt(rsquared - Math.pow(x - index.x, 2)));
+						int cy2 = (int)index.y - (int)Math.floor(Math.sqrt(rsquared - Math.pow(x - index.x, 2)));
+						
+						if(x < cx1 && y < cy1 && x > cx2 && y > cy2){
+							visibleCells.add(new Vector2(x, y));
+						}
+					}
+				}
 			}
 		}
 		
