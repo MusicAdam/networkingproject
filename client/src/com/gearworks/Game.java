@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.gearworks.game.Gui;
@@ -88,15 +89,22 @@ public class Game implements ApplicationListener {
 		client = new Client();
 		
 		Kryo kryo = client.getKryo();
-		kryo.register(Message.class);
+		kryo.register(ConnectMessage.class);
+		kryo.register(ConnectedMessage.class);
+		kryo.register(StartTurn.class);
+		kryo.register(EndTurn.class);
+		kryo.register(InvalidMove.class);
 		
 		client.start();
+		
 		try {
-			client.connect(5000, "10.34.23.26", 60420, 60421);
+			client.connect(5000, "localhost", 60420, 60421);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		client.addListener(new ClientListener());
+		client.addListener(new ClientListener(this, client));
+		
+		client.sendTCP(new ConnectMessage());
 		
 
 		//GUI
@@ -135,8 +143,9 @@ public class Game implements ApplicationListener {
 			
 			sm.update();
 			camera.update();
+			followPlayer(); //Tell camera to follow Player
 		}
-		
+
 		sm.render();
 		ui.render(batch, renderer);
 		
@@ -180,6 +189,17 @@ public class Game implements ApplicationListener {
 		entities.add(ent);
 		
 		return ent;
+	}
+	
+	/* Makes the camera follow the currently selected player */
+	public void followPlayer(){
+		if(ui == null){
+			camera.position.set(new Vector3());
+		}else if(ui.activeCharacter() != null){
+			camera.position.set(camera.position.x + (ui.activeCharacter().position().x - camera.position.x )/8, 
+								camera.position.y + (ui.activeCharacter().position().y  -camera.position.y)/8, 
+								camera.position.z);
+		}
 	}
 	
 	public void destroy(Entity ent){

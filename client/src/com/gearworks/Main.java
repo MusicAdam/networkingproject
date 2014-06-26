@@ -3,6 +3,14 @@ package com.gearworks;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+/**
+ * THIS IS THE CLIENT MAIN
+ * 
+ * @author quinlanb
+ * 
+ */
+
+
 public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
@@ -11,5 +19,5 @@ public class Main {
 		cfg.height = Game.V_HEIGHT * Game.SCALE;
 		
 		new LwjglApplication(new Game(), cfg);
-	} 
+	}
 }

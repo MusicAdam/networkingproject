@@ -11,6 +11,7 @@ public class ServerListener extends Listener{
 	
 	private Server server;
 	private Game game;
+	private int pidGen;
 	
 	public ServerListener(Server s, Game g){
 		game = g;
@@ -19,8 +20,10 @@ public class ServerListener extends Listener{
 	
 	@Override
 	 public void received (Connection connection, Object object) {
+		
 		if(object instanceof ConnectMessage){
-			//do nothing? because TCP handles the connecting
+			server.sendToTCP(pidGen, new ConnectedMessage(pidGen));
+			pidGen++;
 		}
 		else if(object instanceof EndTurn){
 			//Check to see if move is legal
@@ -41,9 +44,8 @@ public class ServerListener extends Listener{
 					game.inactivePlayer(game.activePlayer());	//assign inactive as last active
 					game.activePlayer(temp);					//assign new active to last inactive
 					//TODO Send StartTurn message to all
-				}
-			}
-			
+				}//end else
+			}//end for
 			
 		}
 	}

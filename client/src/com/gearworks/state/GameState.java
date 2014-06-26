@@ -22,6 +22,8 @@ public class GameState implements State {
 
 	@Override
 	public void render(Game game) {
+		game.batch().setProjectionMatrix(game.camera().combined);
+		
 		game.level().render(game.renderer());
 		
 		for(Entity ent : game.entities()){
@@ -40,7 +42,7 @@ public class GameState implements State {
 	@Override
 	public void onEnter(Game game) {		
 		game.level(new Level(game));
-		game.level().load("assets/map1.tmx");
+		game.level().load("assets/map2.tmx");
 		
 		Player pl = new Player(0, Player.Team.Sneeker);
 		pl.spawnCharacters(game);

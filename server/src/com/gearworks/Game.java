@@ -63,7 +63,11 @@ public class Game implements ApplicationListener {
 		server = new Server();
 		
 		Kryo kryo = server.getKryo();
-		kryo.register(Message.class);
+		kryo.register(ConnectMessage.class);
+		kryo.register(ConnectedMessage.class);
+		kryo.register(StartTurn.class);
+		kryo.register(EndTurn.class);
+		kryo.register(InvalidMove.class);
 		
 		server.start();
 		try {

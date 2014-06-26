@@ -66,7 +66,6 @@ public class UserInterface implements InputProcessor{
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x - 1, (int)index.y);
-				game.level().calculateLighting(game.player());
 			}
 		}
 		
@@ -119,6 +118,7 @@ public class UserInterface implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount) {
+		game.camera().zoom += .1 * amount;
 		return false;
 	}
 	
@@ -128,5 +128,6 @@ public class UserInterface implements InputProcessor{
 	}
 	
 	public void activeCharacter(Character c){ activeCharacter = c; }
+	public Character activeCharacter(){ return activeCharacter; }
 
 }

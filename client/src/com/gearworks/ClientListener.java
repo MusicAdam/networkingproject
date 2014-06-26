@@ -1,9 +1,20 @@
 package com.gearworks;
+import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.shared.StartTurn;
 
 public class ClientListener extends Listener{
+	
+	private Game game;
+	private Client client;
+	
+	public ClientListener(Game g, Client c){
+		
+		game = g;
+		client = c;
+		
+	}
 	
 	public void received (Connection connection, Object object){
 		if(object instanceof StartTurn){
