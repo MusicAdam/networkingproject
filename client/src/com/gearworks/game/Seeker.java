@@ -1,14 +1,13 @@
-package com.gearworks.game;
+//package com.gearworks.game;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.gearworks.Game;
-import com.gearworks.shared.Character;
+//import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+//import com.gearworks.Game;
 
-public class Seeker extends Character {
+//public class Seeker extends Character {
 
-	public Seeker(Game cRef) {
-		super(cRef);
+//	public Seeker(Game cRef) {
+//		super(cRef);
 		// TODO Auto-generated constructor stub
-	}
+//	}
 	
-}
+//}
