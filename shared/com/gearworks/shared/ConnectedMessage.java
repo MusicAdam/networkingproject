@@ -8,12 +8,20 @@ package com.gearworks.shared;
 
 public class ConnectedMessage extends Message {
 
-	private int pid;
+	private Player player;
 	
-	public ConnectedMessage(int id) {
-		pid = id;
+	public ConnectedMessage(Player p) {
+		player(p);
 	}
 
-	//TODO anything
+	public Player player() {
+		return player;
+	}
+
+	public void player(Player player) {
+		this.player = player;
+	}
+
+	//TODO anything (not really)
 	
 }

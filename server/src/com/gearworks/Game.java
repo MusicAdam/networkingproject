@@ -15,10 +15,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
-import com.gearworks.shared.Entity;
 import com.gearworks.shared.*;
 import com.gearworks.shared.Character;
 import com.gearworks.state.GameState;
@@ -68,6 +69,13 @@ public class Game implements ApplicationListener {
 		kryo.register(StartTurn.class);
 		kryo.register(EndTurn.class);
 		kryo.register(InvalidMove.class);
+		kryo.register(GameFullMessage.class);
+		kryo.register(Player.class);
+		kryo.register(Array.class);
+		kryo.register(Object[].class);
+		kryo.register(Connection.class);
+		kryo.register(Connection[].class);
+		kryo.register(Server.class);
 		
 		server.start();
 		try {

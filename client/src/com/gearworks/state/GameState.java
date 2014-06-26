@@ -44,7 +44,7 @@ public class GameState implements State {
 		game.level(new Level(game));
 		game.level().load("assets/map2.tmx");
 		
-		Player pl = new Player(0, Player.Team.Sneeker);
+		Player pl = new Player(0, Player.Team.Sneaker);
 		pl.spawnCharacters(game);
 		game.ui().activeCharacter(pl.characters().first());
 		game.player(pl);

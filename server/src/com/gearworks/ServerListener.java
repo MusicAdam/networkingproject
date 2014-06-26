@@ -16,14 +16,30 @@ public class ServerListener extends Listener{
 	public ServerListener(Server s, Game g){
 		game = g;
 		server = s;
+		pidGen = -1;
 	}
 	
 	@Override
 	 public void received (Connection connection, Object object) {
 		
+		
+		
 		if(object instanceof ConnectMessage){
-			server.sendToTCP(pidGen, new ConnectedMessage(pidGen));
 			pidGen++;
+			if(pidGen <= 1){
+				if(pidGen == 0){
+					game.activePlayer(new Player(pidGen, connection));
+					server.sendToTCP(pidGen, new ConnectedMessage(game.activePlayer()));
+				}
+				else if(pidGen == 1){
+					game.inactivePlayer(new Player(pidGen, connection));
+					server.sendToTCP(pidGen, new ConnectedMessage(game.inactivePlayer()));
+				}
+			}
+			else{
+				server.sendToTCP(pidGen, new GameFullMessage());
+			}
+				
 		}
 		else if(object instanceof EndTurn){
 			//Check to see if move is legal
