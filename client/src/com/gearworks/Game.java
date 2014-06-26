@@ -17,6 +17,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.gearworks.game.Gui;
+import com.gearworks.game.Label;
 import com.gearworks.shared.*;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
@@ -51,6 +53,7 @@ public class Game implements ApplicationListener {
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	private Player player;
+	private Gui gui;
 	
 	@Override
 	public void create() {	
@@ -94,6 +97,11 @@ public class Game implements ApplicationListener {
 			e.printStackTrace();
 		}
 		client.addListener(new ClientListener());
+		
+
+		//GUI
+		//gui = new Gui();
+		spawn(new Label(this));
 		
 	}
 
