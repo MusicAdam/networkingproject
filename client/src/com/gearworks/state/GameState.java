@@ -16,14 +16,15 @@ import com.gearworks.shared.Player;
 import com.gearworks.shared.Character;
 import com.gearworks.shared.Level;
 
+/*
+ * This is the state the player is in after connection has been made.
+ */
 public class GameState implements State {
 	private static int ID = 0;
 	
 
 	@Override
-	public void render(Game game) {
-		game.batch().setProjectionMatrix(game.camera().combined);
-		
+	public void render(Game game) {		
 		game.level().render(game.renderer());
 		
 		for(Entity ent : game.entities()){
