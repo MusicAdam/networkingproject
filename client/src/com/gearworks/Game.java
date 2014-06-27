@@ -32,8 +32,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
-import com.gearworks.gui.GuiElement;
-import com.gearworks.gui.Label;
 import com.gearworks.shared.*;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
@@ -68,7 +66,6 @@ public class Game implements ApplicationListener {
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	private Player player;
-	private GuiElement gui;
 	
 	Skin skin;
 	Stage stage;
