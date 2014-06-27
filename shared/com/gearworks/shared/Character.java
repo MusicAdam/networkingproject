@@ -19,7 +19,11 @@ public class Character extends Entity {
 	public Character(Player player, Game cRef) {
 		super(cRef);
 		this.player = player;
-		myTexture = new Texture(Gdx.files.internal("assets/person.png"));
+		if(player.team() == Player.Team.Seeker){
+			myTexture = new Texture(Gdx.files.internal("assets/seeker.png"));
+		}else{
+			myTexture = new Texture(Gdx.files.internal("assets/sneaker.png"));
+		}
 		size(32, 32);
 	}
 	
