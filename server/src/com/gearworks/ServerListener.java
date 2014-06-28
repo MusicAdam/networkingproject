@@ -20,10 +20,17 @@ public class ServerListener extends Listener{
 	}
 	
 	@Override
+	public void connected(Connection connection){
+		
+	}
+	
+	@Override
 	 public void received (Connection connection, Object object) {
 		
 		
-		
+		/*
+		 * This will be handled in instance
+		 
 		if(object instanceof ConnectMessage){
 			pidGen++;
 			if(pidGen <= 1){
@@ -63,6 +70,6 @@ public class ServerListener extends Listener{
 				}//end else
 			}//end for
 			
-		}
+		}*/
 	}
 }

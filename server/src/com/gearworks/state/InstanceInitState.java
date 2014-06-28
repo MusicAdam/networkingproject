@@ -10,31 +10,34 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
+import com.gearworks.ServerListener;
+import com.gearworks.game.Instance;
 import com.gearworks.shared.Entity;
 
-public class GameState implements State {
+//Server enters this state after it has been initialized
+public class InstanceInitState implements State {
 	private static int ID = 0;
+	private Instance  instance;
+	
+	public InstanceInitState(Instance inst){
+		instance = inst;
+	}
 
 	@Override
 	public void render(Game game) {
-		game.batch().setProjectionMatrix(game.camera().combined);
-		game.batch().begin();
-		for(Entity ent : game.entities()){
-			ent.render(game.batch(), game.renderer());
-		}
-		game.batch().end();
 	}
 
 	@Override
 	public void update(Game game) {
-		for(Entity ent : game.entities()){
-			ent.update();
-		}
 	}
 
 	@Override
-	public void onEnter(Game game) {		
-		System.out.println("[GameState::onEnter]");
+	public void onEnter(Game game) {
+		//Generate connect messages for client
+		
+		
+		
+		System.out.println("[InstanceInitState::onEnter]");
 	}
 
 	@Override
@@ -49,7 +52,7 @@ public class GameState implements State {
 
 	@Override
 	public boolean canExitState(Game game) {
-		return false;
+		return instance.clientsReady();
 	}
 	
 	@Override

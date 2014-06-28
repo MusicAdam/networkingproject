@@ -1,12 +1,15 @@
 package com.gearworks.shared;
 
-/* This Message is for when the client sends the server a request to connect
- * WHO KNOOOOOWS WHAT COULD HAPPEN?!
+/*
  * Interrobang = ? + !
+ * 
+ * This is sent by the server to tell the client a game instance has been created 
  */
 
 public class ConnectMessage extends Message {
 	
-	
+	public int instanceId;		//Server instance id
+	public int mapId;			//The id of the map being played on
+	public Player.Team	team;	//The team which the client will start on
 
 }

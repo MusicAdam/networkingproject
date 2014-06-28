@@ -15,29 +15,15 @@ public class Player {
 	
 	private Team	team;		//Either seeker or sneeker	
 							  	//or sneaking = false and you are the controlling the seekers
-	private int 	score;			//fairly obvious, keeps track of score
+	private int 	score;		//fairly obvious, keeps track of score
 	private boolean active;		//This keeps track of what player is active aka who's turn it is
-	private int 	id;			//Unique player id assigned by the server
+	private int 	instanceId;			//Unique instace id assigned by the server once a connection has been made
 	private Array<Character>	characters;	//The player's characters.
 	private Connection connection;
 	
-	
-	public Player(int id, Team team){
-		this.team = team;
-		this.id = id;
-		characters = new Array<Character>();
-	}
-	
-	public Player(int id, Connection c){
-		this.id = id;
+	public Player(Connection c){
 		this.connection = c;
 		characters = new Array<Character>();
-		if(id == 0){
-			team = team.Sneaker;
-		}
-		else if(id == 1){
-			team = team.Seeker;
-		}
 	}
 	
 	public void spawnCharacters(Game game){
@@ -54,8 +40,10 @@ public class Player {
 		}
 	}
 	
-	public int id(){ return id; }
+	public int instanceId(){ return instanceId; }
+	public void instanceId(int id){ instanceId = id; }
 	public Team team(){ return team; }
+	public void team(Team t){ team = t; }
 	public Array<Character> characters(){ return characters; }
 	public Connection connection(){return connection;}
 }

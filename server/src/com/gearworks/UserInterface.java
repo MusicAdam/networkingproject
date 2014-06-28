@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.gearworks.shared.Entity;
 import com.gearworks.shared.Utils;
-import com.gearworks.state.GameState;
+import com.gearworks.state.ReadyState;
 
 public class UserInterface implements InputProcessor{
 	private Game game;

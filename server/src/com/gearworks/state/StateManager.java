@@ -5,7 +5,7 @@ import com.gearworks.Game;
 
 public class StateManager {
 	protected State state;
-	protected Game clientRef;
+	protected Game game;
 	
 	//Compares state id's
 	public static boolean statesEqual(State state, State cState){
@@ -18,31 +18,31 @@ public class StateManager {
 	}
 	
 	public StateManager(Game clientRef){
-		this.clientRef = clientRef;
+		this.game = clientRef;
 	}
 	
 	public void update(){
 		if(state != null)
-			state.update(clientRef);
+			state.update(game);
 	}
 	
 	public void render(){
 		if(state != null)
-			state.render(clientRef);
+			state.render(game);
 	}
 	
 	public boolean setState(State toState){
 		//Don't change states if they are the same
 		if(statesEqual(state, toState)) return false;
 		
-		if(state == null){
+		if(state == null && toState.canEnterState(game)){
 			state = toState;
-		}else{
-			state.onExit(clientRef);
+		}else if(state.canExitState(game)){
+			state.onExit(game);
 			state = toState;
 		}
 		
-		state.onEnter(clientRef);
+		state.onEnter(game);
 		
 		return true;
 	}

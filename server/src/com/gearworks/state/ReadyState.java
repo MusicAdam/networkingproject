@@ -10,47 +10,30 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
+import com.gearworks.ServerListener;
 import com.gearworks.shared.Entity;
-import com.gearworks.shared.Level;
-import com.gearworks.shared.Player;
-import com.gearworks.shared.Character;
-import com.gearworks.shared.Level;
 
-/*
- * This is the state the player is in after connection has been made.
- */
-public class GameState implements State {
+//Server enters this state after it has been initialized
+public class ReadyState implements State {
 	private static int ID = 0;
-	
 
 	@Override
-	public void render(Game game) {		
-		game.level().render(game.renderer());
-		
-		for(Entity ent : game.entities()){
-			ent.render(game.batch(), game.renderer());
-		}
-		
+	public void render(Game game) {
 	}
 
 	@Override
 	public void update(Game game) {
-		for(Entity ent : game.entities()){
-			ent.update();
-		}
 	}
-	
+
 	@Override
 	public void onEnter(Game game) {		
-		game.level(new Level(game));
-		game.level().load("assets/map2.tmx");
+		game.server().addListener(new ServerListener(game.server(), game)); //Start listening to clients
 		
-		System.out.println("[GameState::onEnter]");
+		System.out.println("[ReadyState::onEnter]");
 	}
 
 	@Override
 	public void onExit(Game game) {
-		game.level().dispose();
 		
 	}
 	
@@ -61,11 +44,10 @@ public class GameState implements State {
 
 	@Override
 	public boolean canExitState(Game game) {
-		return false;
+		return true;
 	}
 	
 	@Override
 	public int getId(){ return ID; }
-
 
 }
