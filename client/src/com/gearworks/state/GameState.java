@@ -11,26 +11,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 import com.gearworks.shared.Entity;
-import com.gearworks.shared.Level;
-import com.gearworks.shared.Player;
-import com.gearworks.shared.Character;
-import com.gearworks.shared.Level;
 
-/*
- * This is the state the player is in after connection has been made.
- */
 public class GameState implements State {
 	private static int ID = 0;
-	
 
 	@Override
-	public void render(Game game) {		
+	public void render(Game game) {
 		game.level().render(game.renderer());
+		
+		game.batch().setProjectionMatrix(game.camera().combined);
 		
 		for(Entity ent : game.entities()){
 			ent.render(game.batch(), game.renderer());
 		}
-		
 	}
 
 	@Override
@@ -39,18 +32,15 @@ public class GameState implements State {
 			ent.update();
 		}
 	}
-	
+
 	@Override
 	public void onEnter(Game game) {		
-		game.level(new Level(game));
-		game.level().load("assets/map2.tmx");
-		
+		game.player().spawnCharacters(game);
 		System.out.println("[GameState::onEnter]");
 	}
 
 	@Override
 	public void onExit(Game game) {
-		game.level().dispose();
 		
 	}
 	
@@ -66,6 +56,5 @@ public class GameState implements State {
 	
 	@Override
 	public int getId(){ return ID; }
-
 
 }

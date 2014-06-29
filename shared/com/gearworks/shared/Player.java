@@ -24,6 +24,7 @@ public class Player {
 	public Player(Connection c){
 		this.connection = c;
 		characters = new Array<Character>();
+		instanceId = -1;
 	}
 	
 	public void spawnCharacters(Game game){

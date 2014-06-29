@@ -33,6 +33,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.shared.*;
+import com.gearworks.state.ConnectState;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -67,6 +68,8 @@ public class Game implements ApplicationListener {
 	private ShapeRenderer renderer;
 	private Player player;
 	
+	private String mapToLoad;
+	
 	Skin skin;
 	Stage stage;
 	
@@ -88,7 +91,6 @@ public class Game implements ApplicationListener {
 		
 		//State Manager
 		sm = new StateManager(this);
-		sm.setState(new GameState());
 		
 		font = new BitmapFont();
 		font.setScale(.8f);
@@ -100,6 +102,7 @@ public class Game implements ApplicationListener {
 		
 		//Client setup
 		client = new Client();
+		client.start();
 		
 		Kryo kryo = client.getKryo();
 		kryo.register(ConnectMessage.class);
@@ -115,17 +118,6 @@ public class Game implements ApplicationListener {
 		kryo.register(Connection[].class);
 		kryo.register(Server.class);
 		kryo.register(Player.Team.class);
-		
-		
-		
-		client.start();
-		
-		try {
-			client.connect(5000, "localhost", 60420, 60421);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		client.addListener(new ClientListener(this, client));
 		
 
 		//GUI
@@ -178,6 +170,8 @@ public class Game implements ApplicationListener {
 		inputMultiplexer.addProcessor(stage);
 		*/
 		inputMultiplexer.addProcessor(ui);
+		
+		sm.setState(new ConnectState()); //Set state after we are done initializing everything
 	}
 
 	@Override
@@ -301,4 +295,12 @@ public class Game implements ApplicationListener {
 	public UserInterface ui(){ return ui; }
 	public Player player(){ return player; }
 	public void player(Player pl){ player = pl; }
+
+	public Client client() {
+		return client;
+	}
+	
+	public boolean setState(State s){
+		return sm.setState(s);
+	}
 }

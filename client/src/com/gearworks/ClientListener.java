@@ -3,6 +3,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.shared.*;
+import com.gearworks.state.ConnectState;
 
 public class ClientListener extends Listener{
 	
@@ -14,6 +15,16 @@ public class ClientListener extends Listener{
 		game = g;
 		client = c;
 		
+	}
+	
+	@Override
+	public void disconnected(Connection connection){
+		System.out.println("Disconnected");
+	}
+	
+	@Override
+	public void connected(Connection connection){
+		System.out.println("Connected");
 	}
 	
 	public void received (Connection connection, Object object){
@@ -45,7 +56,7 @@ public class ClientListener extends Listener{
 			player.team(msg.team);
 			
 			game.player(player);
-			game.level().load(msg.mapName);
+			((ConnectState)game.state()).mapName(msg.mapName);
 		}
 	}
 
