@@ -20,6 +20,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
+import com.gearworks.game.Instance;
 import com.gearworks.shared.*;
 import com.gearworks.shared.Character;
 import com.gearworks.state.ReadyState;
@@ -49,7 +50,8 @@ public class Game implements ApplicationListener {
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
 	private Level level;
-	private Array<Player> players; 			//This is the list of players
+	private Array<Player> idlePlayers; 			//This is the list of players who are connected but not in game
+	private Array<Instance> instances;			//This is a list of all the active games
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -58,6 +60,8 @@ public class Game implements ApplicationListener {
 	
 	@Override
 	public void create() {	
+		instances = new Array<Instance>();
+		idlePlayers = new Array<Player>();
 		//Setup Server
 		server = new Server();
 		
@@ -74,6 +78,7 @@ public class Game implements ApplicationListener {
 		kryo.register(Connection.class);
 		kryo.register(Connection[].class);
 		kryo.register(Server.class);
+		kryo.register(Player.Team.class);
 		
 		server.start();
 		try {
@@ -195,6 +200,12 @@ public class Game implements ApplicationListener {
 		entities.remove(ent);
 	}
 	
+	public Instance createInstance(Player p1, Player p2){
+		Instance instance = new Instance(instances.size, p1, p2, this);
+		instances.add(instance);
+		return instance;
+	}
+	
 	public ArrayList<Entity> entities() {
 		return entities;
 	}
@@ -204,7 +215,7 @@ public class Game implements ApplicationListener {
 	public SpriteBatch batch() { return batch; }	
 	public ShapeRenderer renderer() { return renderer; }
 	public Server server(){ return server; }
-	public Array<Player> players(){ return players; }
+	public Array<Player> idlePlayers(){ return idlePlayers; }
 
 	public Level level() {
 		return level;
@@ -212,5 +223,9 @@ public class Game implements ApplicationListener {
 
 	public void level(Level level) {
 		this.level = level;
+	}
+	
+	public void addPlayer(Player p){
+		idlePlayers.add(p);
 	}
 }

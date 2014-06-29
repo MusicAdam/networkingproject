@@ -21,7 +21,9 @@ public class ServerListener extends Listener{
 	
 	@Override
 	public void connected(Connection connection){
-		
+		Player player = new Player(connection);
+		game.addPlayer(player);
+		System.out.println("Player connected, size: " + game.idlePlayers().size );
 	}
 	
 	@Override

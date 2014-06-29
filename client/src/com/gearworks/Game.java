@@ -114,19 +114,18 @@ public class Game implements ApplicationListener {
 		kryo.register(Connection.class);
 		kryo.register(Connection[].class);
 		kryo.register(Server.class);
+		kryo.register(Player.Team.class);
 		
 		
 		
 		client.start();
-		/*
+		
 		try {
 			client.connect(5000, "localhost", 60420, 60421);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		client.addListener(new ClientListener(this, client));
-		
-		client.sendTCP(new ConnectMessage());*/
 		
 
 		//GUI

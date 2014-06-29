@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.Game;
 import com.gearworks.shared.Level;
 import com.gearworks.shared.Player;
+import com.gearworks.state.InstanceInitState;
+import com.gearworks.state.PlayerTurn;
 import com.gearworks.state.StateManager;
 
 /** An instance is the representation of a game in which two players have been matched */
@@ -23,28 +25,39 @@ public class Instance extends Listener{
 	
 	private StateManager sm;				//Manages instance states:
 											//		InstanceInitState: 	sends out the ConnectMessage to inform players that the instance has been created serverside
-											//		WaitForPlayer:		waits for players to make their turn
+											//		PlayerTurn:		waits for players to make their turn
 											//		ProcessTurn:		handle endturn logic
 	
-	public Instance(Player p1, Player p2, Game game){
+	public Instance(int id, Player p1, Player p2, Game game){
+		this.id = id;
 		players 	= new Player[]{p1, p2};
 		turnsLeft 	= NUM_TURNS;
 		round		= 1;
 		
 		level = new Level(game);
-		level.load(1);
+		level.load("assets/map1.tmx");
 		
 		game.server().addListener(this);
 		
 		sm = new StateManager(game);
+		sm.setState(new InstanceInitState(this));
 	}
-
+	
+	public void update(){
+		sm.update();
+		
+		if(sm.state().getClass() == InstanceInitState.class){ 
+			//Try to switch to the wait for player turn state, wont happen until both players have connected: see InstanceInitState.canExitState
+			sm.setState(new PlayerTurn(this));
+		}
+	}
+	
 	//Returns true after both clients have completed the conection handshake
 	public boolean clientsReady() {
 		return (players[0].instanceId() == id && players[1].instanceId() == id);
 	}
 	
-	
-	
-	
+	public int id(){ return id; }
+	public Level level(){ return level; }
+	public Player[] players(){ return players; } 
 }

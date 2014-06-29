@@ -29,13 +29,17 @@ public class Level {
 	protected Vector2[] visibleEnemies;
 	protected int mapWidth;
 	protected int mapHeight;
+	protected String file;
 	
 	public Level(Game game){
 		this.game = game;
 		visibleEnemies 	= null;
+		this.hiddenCells = new Array<Vector2>();
+		file = "";
 	}
 	
 	public void load(String name){
+		file = name;
 		tileMap = new TmxMapLoader().load(name);
 		mapRenderer = new OrthogonalTiledMapRenderer(tileMap);
 		
@@ -245,5 +249,7 @@ public class Level {
 		tileMap.dispose();
 		mapRenderer.dispose();
 	}
+	
+	public String file(){ return file; }
 	
 }

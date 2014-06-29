@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="6" height="6" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="walls" tilewidth="32" tileheight="32">
+  <properties>
+   <property name="isWall" value=""/>
+  </properties>
+  <image source="walls.png" width="192" height="192"/>
+ </tileset>
+ <tileset firstgid="37" name="tiles" tilewidth="32" tileheight="32">
+  <image source="tiles.png" width="192" height="192"/>
+  <tile id="0">
+   <properties>
+    <property name="seekerSpawn" value=""/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="sneakerSpawn" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="map" width="6" height="6">
+  <data encoding="base64" compression="zlib">
+   eJwTYGBgEEHDYkAsDMSqSFgbKiYMZSNjUsTVoGKiWOzlAmIALvcEFw==
+  </data>
+ </layer>
+</map>
