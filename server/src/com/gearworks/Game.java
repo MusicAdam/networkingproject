@@ -87,6 +87,7 @@ public class Game implements ApplicationListener {
 		kryo.register(Player.Team.class);
 		kryo.register(Vector2[].class);
 		kryo.register(ArrayIterable.class);
+		kryo.register(Vector2.class);
 		
 		server.start();
 		try {

@@ -15,12 +15,12 @@ public class ServerPlayer extends Player {
 	
 	public void spawnCharacters(Instance inst){
 		if(team == Team.Sneaker){
-			Character sneeker = new Character(this, inst.game);
+			ServerCharacter sneeker = new ServerCharacter(this, inst.game, inst);
 			sneeker.tile((int)inst.level().getSneakerSpawn().x, (int)inst.level().getSneakerSpawn().y);
 			characters.add(sneeker);
 		}else{
 			for(Vector2 index : inst.level().getSeekerSpawns()){
-				Character seeker = new Character(this, inst.game);
+				ServerCharacter seeker = new ServerCharacter(this, inst.game, inst);
 				seeker.tile((int)index.x, (int)index.y);
 				characters.add(seeker);
 			}

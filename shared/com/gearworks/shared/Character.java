@@ -12,9 +12,9 @@ import com.gearworks.Game;
 public class Character extends Entity {
 	public static final int SNEAKER_RADIUS = 5;
 	
-	Texture myTexture;
-	Player player;
-	int x, y;
+	private Texture myTexture;
+	private Player player;
+	protected int x, y;
 	
 	public Character(Player player, Game cRef) {
 		super(cRef);

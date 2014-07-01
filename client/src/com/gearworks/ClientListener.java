@@ -30,7 +30,7 @@ public class ClientListener extends Listener{
 	
 	public void received (Connection connection, Object object){
 		if(object instanceof GameFullMessage){
-			//SOMEHOW DISPLAY IT TO THE FUCKERS
+			//SOMEHOW DISPLAY IT TO THE PLAYERS
 			GameFullMessage gfm = (GameFullMessage) object;
 			System.out.println(gfm.msg());
 		}
