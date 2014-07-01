@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 import com.gearworks.ServerListener;
+import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.Entity;
 import com.gearworks.shared.Player;
 
@@ -25,8 +26,8 @@ public class ReadyState implements State {
 	@Override
 	public void update(Game game) {
 		if(game.idlePlayers().size % 2 == 0 && game.idlePlayers().size >= 2){
-			Player p1 = game.idlePlayers().pop();
-			Player p2 = game.idlePlayers().pop();
+			ServerPlayer p1 = game.idlePlayers().pop();
+			ServerPlayer p2 = game.idlePlayers().pop();
 			game.createInstance(p1, p2);
 		}
 	}

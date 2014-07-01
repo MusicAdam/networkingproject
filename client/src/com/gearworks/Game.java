@@ -2,6 +2,8 @@ package com.gearworks;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -28,11 +30,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Array.ArrayIterable;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.shared.*;
+import com.gearworks.game.Level;
 import com.gearworks.state.ConnectState;
 import com.gearworks.state.GameState;
 import com.gearworks.state.State;
@@ -53,6 +57,7 @@ public class Game implements ApplicationListener {
 	public BitmapFont font;
 	
 	protected StateManager sm;
+	protected Queue<Vector2[]> visibleCellQueue;
 	
 	private Rectangle viewport;
 	private boolean updateViewport;
@@ -78,6 +83,7 @@ public class Game implements ApplicationListener {
 		fpsLogger = new FPSLogger();
 		
 		entities = new ArrayList<Entity>();
+		visibleCellQueue = new ConcurrentLinkedQueue<Vector2[]>();
 		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -118,6 +124,8 @@ public class Game implements ApplicationListener {
 		kryo.register(Connection[].class);
 		kryo.register(Server.class);
 		kryo.register(Player.Team.class);
+		kryo.register(Vector2[].class);
+		kryo.register(ArrayIterable.class);
 		
 
 		//GUI
@@ -201,6 +209,11 @@ public class Game implements ApplicationListener {
 		accum += Gdx.graphics.getDeltaTime();
 		while(accum >= STEP) {
 			accum -= STEP;
+			
+			if(level() != null){
+				if(visibleCellQueue.peek() != null)
+					level().calculateHiddenCells(visibleCellQueue.poll());
+			}
 			
 			sm.update();
 			camera.update();
@@ -302,5 +315,11 @@ public class Game implements ApplicationListener {
 	
 	public boolean setState(State s){
 		return sm.setState(s);
+	}
+	
+
+	//Since we may receive the start turn message before the level has been loaded we need to be able to queue the messages to process when appropriate
+	public void queueVisibleCells(Vector2[] visibleCells){
+		visibleCellQueue.add(visibleCells);
 	}
 }

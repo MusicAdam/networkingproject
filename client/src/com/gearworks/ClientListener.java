@@ -2,6 +2,7 @@ package com.gearworks;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.gearworks.game.ClientLevel;
 import com.gearworks.shared.*;
 import com.gearworks.state.ConnectState;
 
@@ -40,9 +41,9 @@ public class ClientListener extends Listener{
 			
 		}else if(object instanceof StartTurn){
 			StartTurn msg = (StartTurn)object;
-			
-			//level.updateHiddenCells(msg.hiddenCells); //Updates the lighting data
-			//level.updateEnemies(msg.visibleEnemies); //Updates which enemies are visible
+			System.out.println(game.level());
+			game.queueVisibleCells(msg.visibleCells); //Updates the lighting data
+			//((ClientLevel)game.level()).visibleEnemies(msg.visibleEnemies);
 			
 			//if(msg.active.id() == game.player().id()){
 			//	game.setActive(); //Tell the game its now our turn
@@ -57,6 +58,9 @@ public class ClientListener extends Listener{
 			
 			game.player(player);
 			((ConnectState)game.state()).mapName(msg.mapName);
+			
+			//Send the message back to complete handshake
+			connection.sendTCP(msg);
 		}
 	}
 

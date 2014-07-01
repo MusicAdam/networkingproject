@@ -16,11 +16,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Array.ArrayIterable;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.game.Instance;
+import com.gearworks.game.Level;
+import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.*;
 import com.gearworks.shared.Character;
 import com.gearworks.state.ReadyState;
@@ -50,7 +53,8 @@ public class Game implements ApplicationListener {
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
 	private Level level;
-	private Array<Player> idlePlayers; 			//This is the list of players who are connected but not in game
+	private Array<ServerPlayer> idlePlayers; 			//This is the list of players who are connected but not in game
+	private Array<ServerPlayer> players; 				//All currently connected players
 	private Array<Instance> instances;			//This is a list of all the active games
 
 	private SpriteBatch batch;
@@ -61,7 +65,9 @@ public class Game implements ApplicationListener {
 	@Override
 	public void create() {	
 		instances = new Array<Instance>();
-		idlePlayers = new Array<Player>();
+		idlePlayers = new Array<ServerPlayer>();
+		players = new Array<ServerPlayer>();
+		
 		//Setup Server
 		server = new Server();
 		
@@ -79,6 +85,8 @@ public class Game implements ApplicationListener {
 		kryo.register(Connection[].class);
 		kryo.register(Server.class);
 		kryo.register(Player.Team.class);
+		kryo.register(Vector2[].class);
+		kryo.register(ArrayIterable.class);
 		
 		server.start();
 		try {
@@ -145,6 +153,11 @@ public class Game implements ApplicationListener {
 			
 			sm.update();
 			camera.update();
+			
+			//Update game instances (should be threaded to make scalable)
+			for(Instance inst : instances){
+				inst.update();
+			}
 		}
 		
 
@@ -200,7 +213,7 @@ public class Game implements ApplicationListener {
 		entities.remove(ent);
 	}
 	
-	public Instance createInstance(Player p1, Player p2){
+	public Instance createInstance(ServerPlayer p1, ServerPlayer p2){
 		Instance instance = new Instance(instances.size, p1, p2, this);
 		instances.add(instance);
 		return instance;
@@ -215,7 +228,7 @@ public class Game implements ApplicationListener {
 	public SpriteBatch batch() { return batch; }	
 	public ShapeRenderer renderer() { return renderer; }
 	public Server server(){ return server; }
-	public Array<Player> idlePlayers(){ return idlePlayers; }
+	public Array<ServerPlayer> idlePlayers(){ return idlePlayers; }
 
 	public Level level() {
 		return level;
@@ -225,7 +238,49 @@ public class Game implements ApplicationListener {
 		this.level = level;
 	}
 	
-	public void addPlayer(Player p){
+	public void addPlayer(ServerPlayer p){
+		players.add(p);
 		idlePlayers.add(p);
+	}
+	
+	
+	//Remove a player from the server, this means remove from idlePlayers, players, and end any instance currently running with the player
+	public void removePlayer(ServerPlayer pl){
+		players.removeValue(pl, false);
+		idlePlayers.removeValue(pl, false);
+		
+		Instance inst = findInstanceByPlayer(pl);
+		
+		if(inst != null){
+			inst.playerDisconnected(pl);
+		}
+	}
+	
+	public Instance findInstanceByPlayer(Player pl){
+		for(Instance i : instances){
+			if(i.hasPlayer(pl)){
+				return i;
+			}
+		}
+		
+		return null;
+	}
+	
+	public Instance getInstance(int index){
+		return instances.get(index);
+	}
+	
+	public void setState(State s){
+		sm.setState(s);
+	}
+
+	public ServerPlayer findPlayerByConnection(Connection connection) {
+		for(ServerPlayer pl : players){
+			if(pl.connection().equals(connection)){
+				return pl;
+			}
+		}
+		
+		return null;
 	}
 }

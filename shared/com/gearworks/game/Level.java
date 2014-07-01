@@ -1,4 +1,7 @@
-package com.gearworks.shared;
+package com.gearworks.game;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,16 +16,19 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
+import com.gearworks.shared.Character;
 import com.gearworks.shared.Player;
 import com.gearworks.shared.Utils;
+import com.gearworks.shared.Player.Team;
 
 public class Level {
 	public static final String MAP_LAYER = "map";
 	public static final int	   TILE_SIZE = 32;
 	
+	public Game game;
+	
 	private TiledMap tileMap;
 	private OrthogonalTiledMapRenderer mapRenderer;
-	private Game game;
 	protected Array<Vector2> seekerSpawns;
 	protected Vector2 sneakerSpawn;
 	protected Array<Vector2> hiddenCells;
@@ -159,8 +165,8 @@ public class Level {
 		tile.getProperties().put("y", y * tileLayer.getTileHeight() + tileLayer.getTileHeight()/2);
 	}
 	
-	//Should only be called serverside 
-	public void calculateLighting(Player player){
+	//Calculates what a player can see, returns visible cells
+	public Array<Vector2> calculateLighting(Player player){
 		hiddenCells = new Array<Vector2>();
 		Array<Vector2> visibleCells = new Array<Vector2>();
 		for(Character c : player.characters()){
@@ -221,15 +227,21 @@ public class Level {
 				}
 			}
 		}
-		
+		System.out.println("Visible before return: " + visibleCells.size);
+		return visibleCells;
+	}
+	
+	public void calculateHiddenCells(Vector2[] visibleCells){
 		for(int x = 0; x < mapWidth; x++){
 			for(int y = 0; y < mapHeight; y++){
 				Vector2 cell = new Vector2(x, y);
-				if(!visibleCells.contains(cell, false)){
-					hiddenCells.add(cell);
+				for(Vector2 visibleCell : visibleCells){
+					if(visibleCell.equals(cell))
+						hiddenCells.add(cell);
 				}
 			}
 		}
+		System.out.println("Calc hidden cells: " + visibleCells.length);
 	}
 	
 	//Recieves hidden cells from the server and stores it locally

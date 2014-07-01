@@ -1,9 +1,9 @@
 package com.gearworks.game;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.Game;
-import com.gearworks.shared.Level;
 import com.gearworks.shared.Player;
 import com.gearworks.state.InstanceInitState;
 import com.gearworks.state.PlayerTurn;
@@ -15,29 +15,31 @@ public class Instance extends Listener{
 	public static final int NUM_TURNS	=	10;	//Total number of turns in the game
 	public static final int NUM_ROUNDS	=	3;	//Total number of rounds. A round = each player has a chance to be seeker & sneaker
 	
+	public Game game;
 	
-	private Player[] 	players;			//Array containing matched players.
-	private Player 		activePlayer;		//The player whose turn it is.
+	private ServerPlayer[] 		players;			//Array containing matched players.
+	private ServerPlayer 		activePlayer;		//The player whose turn it is.
 	private int	   		turnsLeft;			//Number of turns left
 	private int			round;				//The current round
 	private int			id;					//Used to ID instance
-	private Level		level;				//Instance of the level we are on, used to validate poisitions and calculate vision
+	private ServerLevel		level;				//Instance of the level we are on, used to validate poisitions and calculate vision
 	
 	private StateManager sm;				//Manages instance states:
 											//		InstanceInitState: 	sends out the ConnectMessage to inform players that the instance has been created serverside
 											//		PlayerTurn:		waits for players to make their turn
 											//		ProcessTurn:		handle endturn logic
 	
-	public Instance(int id, Player p1, Player p2, Game game){
+	public Instance(int id, ServerPlayer p1, ServerPlayer p2, Game game){
 		this.id = id;
-		players 	= new Player[]{p1, p2};
+		System.out.println("Instance id: " + id);
+		players 	= new ServerPlayer[]{p1, p2};
 		turnsLeft 	= NUM_TURNS;
 		round		= 1;
 		
-		level = new Level(game);
+		level = new ServerLevel(game);
 		level.load("assets/map1.tmx");
-		
-		game.server().addListener(this);
+		p1.spawnCharacters(this);
+		p2.spawnCharacters(this);
 		
 		sm = new StateManager(game);
 		sm.setState(new InstanceInitState(this));
@@ -45,19 +47,49 @@ public class Instance extends Listener{
 	
 	public void update(){
 		sm.update();
+	}
+	
+	public void playerDisconnected(Player pl){
+		sm.state().onExit(game);
+		sm.setState(null);
 		
-		if(sm.state().getClass() == InstanceInitState.class){ 
-			//Try to switch to the wait for player turn state, wont happen until both players have connected: see InstanceInitState.canExitState
-			sm.setState(new PlayerTurn(this));
-		}
+		//Send out game termination message
+		
+		dispose();
+	}
+	
+	public void dispose(){
+		level.dispose();
+		sm = null;
 	}
 	
 	//Returns true after both clients have completed the conection handshake
 	public boolean clientsReady() {
+		System.out.println("CLient is ready: " + (players[0].instanceId() == id && players[1].instanceId() == id));
 		return (players[0].instanceId() == id && players[1].instanceId() == id);
 	}
 	
+	public boolean hasPlayer(Player pl){
+		return (players[0].equals(pl) || players[1].equals(pl));
+	}
+	
 	public int id(){ return id; }
-	public Level level(){ return level; }
-	public Player[] players(){ return players; } 
+	public ServerLevel level(){ return level; }
+	public ServerPlayer[] players(){ return players; } 
+	public ServerPlayer activePlayer(){ return activePlayer; }
+	public void activePlayer(ServerPlayer pl){ activePlayer = pl; }
+
+	public ServerPlayer getPlayerByConnection(Connection connection) {
+		if(players[0].connection().equals(connection))
+			return players[0];
+		
+		if(players[1].connection().equals(connection))
+			return players[1];
+		
+		return null;
+	}
+
+	public StateManager sm() {
+		return sm;
+	}
 }

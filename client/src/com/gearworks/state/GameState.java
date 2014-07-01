@@ -36,6 +36,7 @@ public class GameState implements State {
 	@Override
 	public void onEnter(Game game) {		
 		game.player().spawnCharacters(game);
+		System.out.println("Player id: " + game.player().instanceId());
 		System.out.println("[GameState::onEnter]");
 	}
 

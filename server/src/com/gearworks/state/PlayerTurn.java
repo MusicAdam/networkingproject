@@ -1,7 +1,11 @@
 package com.gearworks.state;
 
+import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 import com.gearworks.game.Instance;
+import com.gearworks.game.ServerLevel;
+import com.gearworks.shared.Player;
+import com.gearworks.shared.StartTurn;
 
 public class PlayerTurn implements State {
 	private static int ID = 2;
@@ -26,8 +30,28 @@ public class PlayerTurn implements State {
 
 	@Override
 	public void onEnter(Game game) {
-		// TODO Auto-generated method stub
+		System.out.println("[PlayerTurn::onEnter]");
+		
+		if(instance.activePlayer() == null){
+			instance.activePlayer(instance.players()[0]);
+		}else{
+			if(instance.activePlayer().equals(instance.players()[0])){
+				instance.activePlayer(instance.players()[1]);
+			}else{
+				instance.activePlayer(instance.players()[0]);
+			}
+		}
+		
+		StartTurn msg = new StartTurn();
 
+		for(Player pl : instance.players()){
+			msg.active = (instance.activePlayer() == pl);
+			msg.visibleCells = instance.level().calculateLighting(pl).toArray(Vector2.class);
+			System.out.println("Visible cells: " + msg.visibleCells.length);
+			msg.visibleEnemies = instance.level().calculateVisibleEnemies(pl, msg.visibleCells).toArray(Vector2.class);
+			
+			pl.connection().sendTCP(msg);
+		}
 	}
 
 	@Override
@@ -38,8 +62,7 @@ public class PlayerTurn implements State {
 
 	@Override
 	public boolean canEnterState(Game game) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -50,8 +73,7 @@ public class PlayerTurn implements State {
 
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return ID;
 	}
 
 }

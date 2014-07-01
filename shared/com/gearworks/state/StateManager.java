@@ -37,12 +37,13 @@ public class StateManager {
 		
 		if(state == null && toState.canEnterState(game)){
 			state = toState;
-		}else if(state.canExitState(game)){
+		}else if(state.canExitState(game) && toState.canEnterState(game)){
 			state.onExit(game);
 			state = toState;
 		}
 		
-		state.onEnter(game);
+		if(state !=null)
+			state.onEnter(game);
 		
 		return true;
 	}

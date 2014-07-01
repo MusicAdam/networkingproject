@@ -13,13 +13,13 @@ public class Player {
 		Sneaker
 	};
 	
-	private Team	team;		//Either seeker or sneeker	
+	protected Team	team;		//Either seeker or sneeker	
 							  	//or sneaking = false and you are the controlling the seekers
-	private int 	score;		//fairly obvious, keeps track of score
-	private boolean active;		//This keeps track of what player is active aka who's turn it is
+	protected int 	score;		//fairly obvious, keeps track of score
+	protected boolean active;		//This keeps track of what player is active aka who's turn it is
 	private int 	instanceId;			//Unique instace id assigned by the server once a connection has been made
-	private Array<Character>	characters;	//The player's characters.
-	private Connection connection;
+	protected Array<Character>	characters;	//The player's characters.
+	protected Connection connection;
 	
 	public Player(Connection c){
 		this.connection = c;

@@ -31,6 +31,7 @@ public class InstanceInitState implements State {
 
 	@Override
 	public void update(Game game) {
+		instance.sm().setState(new PlayerTurn(instance));
 	}
 
 	@Override
@@ -52,7 +53,6 @@ public class InstanceInitState implements State {
 
 	@Override
 	public void onExit(Game game) {
-		
 	}
 	
 	@Override
