@@ -168,6 +168,7 @@ public class Level {
 	//Calculates what a player can see, returns visible cells
 	public Array<Vector2> calculateLighting(Player player){
 		hiddenCells = new Array<Vector2>();
+		
 		Array<Vector2> visibleCells = new Array<Vector2>();
 		for(Character c : player.characters()){
 			Vector2 index = c.index();
@@ -227,21 +228,34 @@ public class Level {
 				}
 			}
 		}
-		System.out.println("Visible before return: " + visibleCells.size);
+
 		return visibleCells;
 	}
 	
 	public void calculateHiddenCells(Vector2[] visibleCells){
+		System.out.println("Called");
+		hiddenCells = new Array<Vector2>();
+		
+
 		for(int x = 0; x < mapWidth; x++){
 			for(int y = 0; y < mapHeight; y++){
 				Vector2 cell = new Vector2(x, y);
+				
+				//System.out.println("!" + visibleCell + ".equals(" + cell + ")  && !" + hiddenCells.contains(cell, true));
+				
+				boolean contains = false;
+
 				for(Vector2 visibleCell : visibleCells){
-					if(visibleCell.equals(cell))
-						hiddenCells.add(cell);
+					if(visibleCell.equals(cell)){
+						contains = true;
+						break;
+					}
 				}
+				
+				if(!contains)
+					hiddenCells.add(cell);
 			}
 		}
-		System.out.println("Calc hidden cells: " + visibleCells.length);
 	}
 	
 	//Recieves hidden cells from the server and stores it locally

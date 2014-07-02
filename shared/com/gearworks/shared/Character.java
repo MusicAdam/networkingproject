@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
 
 public class Character extends Entity {
@@ -45,7 +46,11 @@ public class Character extends Entity {
 		if(game.level().isWall(x, y)) return;
 		
 		tile(x, y); //sets tile
-		game.level().calculateLighting(player);
+		
+		//Need to continue calculating lighting as the player moves around the map
+		Array<Vector2> visibleCells = game.level().calculateLighting(player);
+		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
+		game.level().calculateHiddenCells(visibleArray);
 	}
 	
 	@Override
