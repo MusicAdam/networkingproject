@@ -13,12 +13,12 @@ public class ServerListener extends Listener{
 	
 	private Server server;
 	private Game game;
-	private int pidGen;
+
 	
 	public ServerListener(Server s, Game g){
 		game = g;
 		server = s;
-		pidGen = -1;
+
 	}
 	
 	@Override
