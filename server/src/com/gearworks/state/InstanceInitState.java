@@ -48,6 +48,9 @@ public class InstanceInitState implements State {
 		instance.players()[1].team(Player.Team.Seeker);
 		instance.players()[1].connection().sendTCP(connectMessage);
 		
+		//Create the characters server side
+		instance.spawnPlayerCharacters();
+		
 		System.out.println("[InstanceInitState::onEnter]");
 	}
 

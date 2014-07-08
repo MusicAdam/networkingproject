@@ -23,7 +23,6 @@ public class ClientLevel extends Level {
 		}
 			
 		visibleEnemies = enemies;
-		
 
 		Player enemy = new Player(null);//Create a fake player to own enemy characters
 		if(game.player().team() == Player.Team.Seeker){
