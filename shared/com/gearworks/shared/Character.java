@@ -21,7 +21,7 @@ public class Character extends Entity {
 		super(cRef);
 		this.player = player;
 		if(player.team() == Player.Team.Seeker){
-			myTexture = new Texture(Gdx.files.internal("assets/seeker.png"));
+			myTexture = new Texture(Gdx.files.internal("assets/seekerv2.png"));
 		}else{
 			myTexture = new Texture(Gdx.files.internal("assets/sneaker.png"));
 		}

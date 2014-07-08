@@ -225,6 +225,10 @@ public class Game implements ApplicationListener {
 	public Instance createInstance(ServerPlayer p1, ServerPlayer p2){
 		Instance instance = new Instance(instances.size, p1, p2, this);
 		instances.add(instance);
+		
+		idlePlayers.removeValue(p1, false);
+		idlePlayers.removeValue(p2, false);
+		
 		return instance;
 	}
 	
