@@ -2,6 +2,8 @@ package com.gearworks;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -55,7 +57,8 @@ public class Game implements ApplicationListener {
 	private Level level;
 	private Array<ServerPlayer> idlePlayers; 			//This is the list of players who are connected but not in game
 	private Array<ServerPlayer> players; 				//All currently connected players
-	private Array<Instance> instances;			//This is a list of all the active games
+	private Array<Instance> instances;					//This is a list of all the active games
+	private Queue<ServerPlayer> removePlayerQueue;		//Disconnected players waiting to be cleaned
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -67,6 +70,7 @@ public class Game implements ApplicationListener {
 		instances = new Array<Instance>();
 		idlePlayers = new Array<ServerPlayer>();
 		players = new Array<ServerPlayer>();
+		removePlayerQueue = new ConcurrentLinkedQueue<ServerPlayer>();
 		
 		//Setup Server
 		server = new Server();
@@ -151,6 +155,10 @@ public class Game implements ApplicationListener {
 		accum += Gdx.graphics.getDeltaTime();
 		while(accum >= STEP) {
 			accum -= STEP;
+			
+			//process queues
+			if(!removePlayerQueue.isEmpty())
+				removePlayer(removePlayerQueue.poll());
 			
 			sm.update();
 			camera.update();
@@ -246,7 +254,7 @@ public class Game implements ApplicationListener {
 	
 	
 	//Remove a player from the server, this means remove from idlePlayers, players, and end any instance currently running with the player
-	public void removePlayer(ServerPlayer pl){
+	private void removePlayer(ServerPlayer pl){
 		players.removeValue(pl, false);
 		idlePlayers.removeValue(pl, false);
 		
@@ -255,6 +263,8 @@ public class Game implements ApplicationListener {
 		if(inst != null){
 			inst.playerDisconnected(pl);
 		}
+		
+		instances.removeValue(inst, true);
 	}
 	
 	public Instance findInstanceByPlayer(Player pl){
@@ -283,5 +293,9 @@ public class Game implements ApplicationListener {
 		}
 		
 		return null;
+	}
+	
+	public void queueRemovePlayer(ServerPlayer pl){
+		removePlayerQueue.add(pl);
 	}
 }

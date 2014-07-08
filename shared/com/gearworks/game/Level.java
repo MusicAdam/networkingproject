@@ -172,7 +172,10 @@ public class Level {
 		Array<Vector2> visibleCells = new Array<Vector2>();
 		for(Character c : player.characters()){
 			Vector2 index = c.index();
-
+			
+			//Add the cell character is in
+			visibleCells.add(c.index());
+			
 			//Handle seeker vision
 			if(player.team() == Player.Team.Seeker){
 				int pos = 1;
@@ -233,7 +236,6 @@ public class Level {
 	}
 	
 	public void calculateHiddenCells(Vector2[] visibleCells){
-		System.out.println("Called");
 		hiddenCells = new Array<Vector2>();
 		
 

@@ -32,7 +32,7 @@ public class ServerListener extends Listener{
 	public void disconnected(Connection connection){
 		ServerPlayer pl = game.findPlayerByConnection(connection);
 		//pl.dispose(); 
-		game.removePlayer(pl);
+		game.queueRemovePlayer(pl);
 	}
 	
 	@Override

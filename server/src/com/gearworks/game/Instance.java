@@ -38,8 +38,6 @@ public class Instance extends Listener{
 		
 		level = new ServerLevel(game);
 		level.load("assets/map1.tmx");
-		p1.spawnCharacters(this);
-		p2.spawnCharacters(this);
 		
 		sm = new StateManager(game);
 		sm.setState(new InstanceInitState(this));
@@ -67,6 +65,11 @@ public class Instance extends Listener{
 	public boolean clientsReady() {
 		System.out.println("CLient is ready: " + (players[0].instanceId() == id && players[1].instanceId() == id));
 		return (players[0].instanceId() == id && players[1].instanceId() == id);
+	}
+	
+	public void spawnPlayerCharacters(){
+		players()[0].spawnCharacters(this);
+		players()[1].spawnCharacters(this);
 	}
 	
 	public boolean hasPlayer(Player pl){
