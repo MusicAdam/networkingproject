@@ -282,7 +282,9 @@ public class Game implements ApplicationListener {
 	}
 	
 	public Instance getInstance(int index){
-		return instances.get(index);
+		if(index < instances.size)
+			return instances.get(index);
+		return null;
 	}
 	
 	public void setState(State s){
