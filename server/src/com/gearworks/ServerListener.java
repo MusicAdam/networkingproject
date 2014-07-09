@@ -41,6 +41,7 @@ public class ServerListener extends Listener{
 		if(object instanceof ConnectMessage){
 			ConnectMessage msg = (ConnectMessage)object;
 			
+			System.out.println("Attempting to get instance: " + msg.instanceId);
 			Instance instance = game.getInstance(msg.instanceId);
 			Player pl = instance.getPlayerByConnection(connection);
 			pl.instanceId(msg.instanceId);

@@ -40,10 +40,12 @@ public class Instance extends Listener{
 		level.load("assets/map1.tmx");
 		
 		sm = new StateManager(game);
-		sm.setState(new InstanceInitState(this));
 	}
 	
 	public void update(){
+		if(sm.state() == null)
+			sm().setState(new InstanceInitState(this));
+		
 		sm.update();
 	}
 	
