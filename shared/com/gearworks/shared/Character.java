@@ -2,6 +2,7 @@ package com.gearworks.shared;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -14,6 +15,7 @@ public class Character extends Entity {
 	public static final int SNEAKER_RADIUS = 5;
 	
 	private Texture myTexture;
+	private Sprite mySprite;
 	private Player player;
 	protected int x, y;
 	
@@ -25,6 +27,8 @@ public class Character extends Entity {
 		}else{
 			myTexture = new Texture(Gdx.files.internal("assets/sneaker.png"));
 		}
+		
+		mySprite = new Sprite(myTexture, 32, 32);
 		size(32, 32);
 	}
 	
@@ -35,6 +39,7 @@ public class Character extends Entity {
 		
 		Vector2 position = game.level().positionFromIndex(x, y);
 		position(position);
+		mySprite.setPosition(position().x, position().y);
 	}
 	
 	//Gets myCell
@@ -44,6 +49,18 @@ public class Character extends Entity {
 	
 	public void move(int x, int y){
 		if(game.level().isWall(x, y)) return;
+		
+		//Get current x and y
+		int dx = x - this.x;
+		int dy = y - this.y;
+		
+		if(dx < 1){
+			if(!mySprite.isFlipX())
+				mySprite.flip(true, false);
+		}else{
+			if(mySprite.isFlipX())
+				mySprite.flip(true, false);			
+		}
 		
 		tile(x, y); //sets tile
 		
@@ -56,7 +73,8 @@ public class Character extends Entity {
 	@Override
 	public void render(SpriteBatch b, ShapeRenderer r){
 		b.begin();
-			b.draw(myTexture, position().x, position().y);
+			mySprite.draw(b);
+			//b.draw(myTexture, position().x, position().y);
 		b.end();
 	}
 	
