@@ -22,6 +22,8 @@ import com.gearworks.shared.Entity;
 import com.gearworks.state.GameState;
 
 public class UserInterface implements InputProcessor{
+	public static final float MAX_ZOOM = 1.2f;
+	public static final float MIN_ZOOM = .08f;
 	private Game game;
 	
 	private Character activeCharacter;
@@ -118,13 +120,12 @@ public class UserInterface implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		Vector2 coord = mouseToScreen(new Vector2(screenX, screenY), game.camera());
-		return true; //This could interfere with menus in the future, unless this class handles the clicks...
+		return false; 
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		return true; //This could interfere with menus in the future, unless this class handles the clicks...
+		return false; 
 	}
 
 	@Override
@@ -139,7 +140,9 @@ public class UserInterface implements InputProcessor{
 
 	@Override
 	public boolean scrolled(int amount) {
-		game.camera().zoom += .1 * amount;
+		float zoom = game.camera().zoom + .1f * amount;
+		if(zoom <= MAX_ZOOM && zoom >= MIN_ZOOM)
+			game.camera().zoom = zoom;
 		return false;
 	}
 	

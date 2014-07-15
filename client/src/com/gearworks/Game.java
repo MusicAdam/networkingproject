@@ -36,6 +36,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.shared.*;
+import com.gearworks.game.ClientLevel;
 import com.gearworks.game.Level;
 import com.gearworks.state.ConnectState;
 import com.gearworks.state.GameState;
@@ -58,6 +59,7 @@ public class Game implements ApplicationListener {
 	
 	protected StateManager sm;
 	protected Queue<Vector2[]> visibleCellQueue;
+	protected Queue<Vector2[]> visibleEnemyQueue;
 	
 	private Rectangle viewport;
 	private boolean updateViewport;
@@ -67,7 +69,7 @@ public class Game implements ApplicationListener {
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
 	private Client client;
-	private Level level;
+	private ClientLevel level;
 
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
@@ -84,6 +86,7 @@ public class Game implements ApplicationListener {
 		
 		entities = new ArrayList<Entity>();
 		visibleCellQueue = new ConcurrentLinkedQueue<Vector2[]>();
+		visibleEnemyQueue = new ConcurrentLinkedQueue<Vector2[]>();
 		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -93,6 +96,7 @@ public class Game implements ApplicationListener {
 		//Camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, V_WIDTH, V_HEIGHT);
+		camera.zoom = .5f; //Default zoom
 		updateViewport = false;
 		
 		//State Manager
@@ -214,6 +218,8 @@ public class Game implements ApplicationListener {
 			if(level() != null){
 				if(visibleCellQueue.peek() != null)
 					level().calculateHiddenCells(visibleCellQueue.poll());
+				if(visibleEnemyQueue.peek() != null)
+					level().visibleEnemies(visibleEnemyQueue.poll());
 			}
 			
 			sm.update();
@@ -294,11 +300,11 @@ public class Game implements ApplicationListener {
 		return entities;
 	}
 	
-	public Level level(){
+	public ClientLevel level(){
 		return level;
 	}
 	
-	public void level(Level level){
+	public void level(ClientLevel level){
 		this.level = level;
 	}
 	
@@ -322,5 +328,9 @@ public class Game implements ApplicationListener {
 	//Since we may receive the start turn message before the level has been loaded we need to be able to queue the messages to process when appropriate
 	public void queueVisibleCells(Vector2[] visibleCells){
 		visibleCellQueue.add(visibleCells);
+	}
+	
+	public void queueVisibleEnemies(Vector2[] visibleEnemies){
+		visibleEnemyQueue.add(visibleEnemies);
 	}
 }

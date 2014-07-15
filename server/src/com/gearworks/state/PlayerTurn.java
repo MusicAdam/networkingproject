@@ -47,8 +47,8 @@ public class PlayerTurn implements State {
 		for(Player pl : instance.players()){
 			msg.active = (instance.activePlayer() == pl);
 			System.out.println("Player team: " + pl.team());
-			System.out.println("\tCharacter: " + pl.characters().size);
 			msg.visibleCells = instance.level().calculateLighting(pl).toArray(Vector2.class);
+			System.out.println("\tCharacter: " + msg.visibleCells.length);
 			msg.visibleEnemies = instance.level().calculateVisibleEnemies(pl, msg.visibleCells).toArray(Vector2.class);
 			
 			pl.connection().sendTCP(msg);

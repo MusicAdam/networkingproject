@@ -16,7 +16,7 @@ public class ServerLevel extends Level {
 	public Array<Vector2> calculateVisibleEnemies(Player pl, Vector2[] visibleCells){
 		Array<Vector2> enemies = new Array<Vector2>();
 		Player other;
-		System.out.println("Player inst id: " + pl.instanceId());
+
 		Instance instance = game.getInstance(pl.instanceId());
 		
 		if(instance.players()[0].equals(pl)){
@@ -32,6 +32,8 @@ public class ServerLevel extends Level {
 				}
 			}
 		}
+		
+		System.out.println(pl + " has " + enemies.size);
 		
 		return enemies;
 	}

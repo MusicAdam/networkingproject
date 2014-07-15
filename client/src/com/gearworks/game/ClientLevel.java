@@ -15,6 +15,7 @@ public class ClientLevel extends Level {
 
 	
 	public void visibleEnemies(Vector2[] enemies){
+		System.out.println("Enemy count: " + enemies.length);
 		if(visibleEnemies != null){
 			for(Vector2 cell : visibleEnemies){
 				Character c = characterInCell(cell);
@@ -34,6 +35,7 @@ public class ClientLevel extends Level {
 		for(Vector2 cell : visibleEnemies){
 			Character c = (Character)game.spawn(new Character(enemy, game));
 			c.move((int)cell.x, (int)cell.y);
+			System.out.println("Spawning enemy in cell " + cell);
 		}
 	}
 	

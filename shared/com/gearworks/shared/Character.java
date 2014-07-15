@@ -54,10 +54,10 @@ public class Character extends Entity {
 		int dx = x - this.x;
 		int dy = y - this.y;
 		
-		if(dx < 1){
+		if(dx < 1 && dy == 0){
 			if(!mySprite.isFlipX())
 				mySprite.flip(true, false);
-		}else{
+		}else if(dy == 0){
 			if(mySprite.isFlipX())
 				mySprite.flip(true, false);			
 		}

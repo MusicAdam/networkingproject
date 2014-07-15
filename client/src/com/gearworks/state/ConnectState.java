@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.badlogic.gdx.Gdx;
 import com.gearworks.ClientListener;
 import com.gearworks.Game;
+import com.gearworks.game.ClientLevel;
 import com.gearworks.game.Level;
 
 //This state is responsible for ensuring that the player successfully connects to the server, and is matched in a game
@@ -47,7 +48,7 @@ public class ConnectState implements State {
 		}else{
 			if(mapName != null){
 				System.out.println("Creating level");
-				game.level(new Level(game));
+				game.level(new ClientLevel(game));
 				game.level().load(mapName);
 			}
 			

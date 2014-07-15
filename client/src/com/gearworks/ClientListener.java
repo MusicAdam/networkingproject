@@ -43,7 +43,7 @@ public class ClientListener extends Listener{
 			StartTurn msg = (StartTurn)object;
 			System.out.println(game.level());
 			game.queueVisibleCells(msg.visibleCells); //Updates the lighting data
-			//((ClientLevel)game.level()).visibleEnemies(msg.visibleEnemies);
+			game.queueVisibleEnemies(msg.visibleEnemies);
 			
 			//if(msg.active.id() == game.player().id()){
 			//	game.setActive(); //Tell the game its now our turn
