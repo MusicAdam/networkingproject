@@ -25,15 +25,19 @@ public class ServerLevel extends Level {
 			other = instance.players()[0];
 		}
 		
+		/*
+		 * 
+		 * This would be for a more secure visible enemy solution, but for our purposes we don't need this
 		for(Vector2 cell : visibleCells){
 			for(Character c : other.characters()){
 				if(c.index().equals(cell)){
 					enemies.add(c.index());
 				}
 			}
+		}*/
+		for(Character c: other.characters()){
+			enemies.add(c.index());
 		}
-		
-		System.out.println(pl + " has " + enemies.size);
 		
 		return enemies;
 	}
