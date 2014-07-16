@@ -28,6 +28,7 @@ import com.gearworks.game.Level;
 import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.*;
 import com.gearworks.shared.Character;
+import com.gearworks.shared.Player.Team;
 import com.gearworks.state.ReadyState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -59,7 +60,7 @@ public class Game implements ApplicationListener {
 	private Array<ServerPlayer> players; 				//All currently connected players
 	private Array<Instance> instances;					//This is a list of all the active games
 	private Queue<ServerPlayer> removePlayerQueue;		//Disconnected players waiting to be cleaned
-
+	private Queue<Message> messageQueue;				//Guess LEL
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	
@@ -159,6 +160,9 @@ public class Game implements ApplicationListener {
 			//process queues
 			if(!removePlayerQueue.isEmpty())
 				removePlayer(removePlayerQueue.poll());
+			if(!messageQueue.isEmpty()){
+				this.processMessage(messageQueue.poll());
+			}
 			
 			sm.update();
 			camera.update();
@@ -174,6 +178,48 @@ public class Game implements ApplicationListener {
 		ui.render(batch, renderer);
 		
 		//fpsLogger.log();
+	}
+
+	private void processMessage(Message poll) {
+		 if(poll instanceof EndTurn){
+			 EndTurn et = (EndTurn)poll;
+			 if(checkVictory(this.getInstance(et.index()))){
+				 //thegamesover
+			 }
+		 }
+		
+	}
+	
+	private boolean checkVictory(Instance i){
+		ServerPlayer p1 = i.activePlayer();
+		ServerPlayer p2;
+		
+		if(i.players()[0] == i.activePlayer()){
+			p2 = i.players()[1];
+		}
+		else
+			p2 = i.players()[0];
+		
+		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
+			for(int j = 0; j < p1.characters().size; j++){
+				if(p1.characters().get(j).index() == p2.characters().get(0).index()){
+					return true;
+				}//end inner if
+			}//end for
+		}//end outer if
+		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
+			for(int j = 0; j < p2.characters().size; j++){
+				if(p2.characters().get(j).index() == p1.characters().get(0).index()){
+					return true;
+				}//end inner if
+			}//end for
+		}
+		else{
+			System.out.println("Something went wrong checking victory");
+		}
+		
+		return false;
+		
 	}
 
 	@Override
@@ -303,5 +349,14 @@ public class Game implements ApplicationListener {
 	
 	public void queueRemovePlayer(ServerPlayer pl){
 		removePlayerQueue.add(pl);
+	}
+
+	public Queue<Message> messageQueue() {
+		return messageQueue;
+	}
+
+	public void addToMessageQueue(Message m) {
+		messageQueue.add(m);
+		
 	}
 }

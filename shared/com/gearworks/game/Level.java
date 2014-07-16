@@ -280,4 +280,36 @@ public class Level {
 	
 	public String file(){ return file; }
 	
+	private boolean checkVictory(Instance i){
+		ServerPlayer p1 = i.activePlayer();
+		ServerPlayer p2;
+		
+		if(i.players()[0] == i.activePlayer()){
+			p2 = i.players()[1];
+		}
+		else
+			p2 = i.players()[0];
+		
+		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
+			for(int j = 0; j < p1.characters().size; j++){
+				if(p1.characters().get(j).index() == p2.characters().get(0).index()){
+					return true;
+				}//end inner if
+			}//end for
+		}//end outer if
+		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
+			for(int j = 0; j < p2.characters().size; j++){
+				if(p2.characters().get(j).index() == p1.characters().get(0).index()){
+					return true;
+				}//end inner if
+			}//end for
+		}
+		else{
+			System.out.println("Something went wrong checking victory");
+		}
+		
+		return false;
+		
+	}
+	
 }
