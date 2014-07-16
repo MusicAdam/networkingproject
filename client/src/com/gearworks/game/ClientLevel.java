@@ -15,7 +15,6 @@ public class ClientLevel extends Level {
 
 	
 	public void visibleEnemies(Vector2[] enemies){
-		System.out.println("Enemy count: " + enemies.length);
 		if(visibleEnemies != null){
 			for(Vector2 cell : visibleEnemies){
 				Character c = characterInCell(cell);
@@ -33,24 +32,11 @@ public class ClientLevel extends Level {
 		}
 		
 		for(Vector2 cell : visibleEnemies){
-			Character c = (Character)game.spawn(new Character(enemy, game));
-			c.move((int)cell.x, (int)cell.y);
-			System.out.println("Spawning enemy in cell " + cell);
-		}
-	}
-	
-	public Character characterInCell(Vector2 cell){
-		for(Entity ent : game.entities()){
-			if(ent instanceof Character){
-				Character c = (Character)ent;
-				
-				if(c.index().equals(cell)){
-					return c;
-				}
+			if(!hiddenCells.contains(cell, false)){
+				Character c = (Character)game.spawn(new Character(enemy, game));
+				c.tile((int)cell.x, (int)cell.y); //Need to use tile here because we don't want to recalculate lighting for the enemy characters
 			}
 		}
-		
-		return null;
 	}
 
 }

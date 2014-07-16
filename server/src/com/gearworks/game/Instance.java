@@ -65,7 +65,6 @@ public class Instance extends Listener{
 	
 	//Returns true after both clients have completed the conection handshake
 	public boolean clientsReady() {
-		System.out.println("CLient is ready: " + (players[0].instanceId() == id && players[1].instanceId() == id));
 		return (players[0].instanceId() == id && players[1].instanceId() == id);
 	}
 	

@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
 import com.gearworks.shared.Character;
+import com.gearworks.shared.Entity;
 import com.gearworks.shared.Player;
 import com.gearworks.shared.Utils;
 import com.gearworks.shared.Player.Team;
@@ -41,6 +42,7 @@ public class Level {
 		this.game = game;
 		visibleEnemies 	= null;
 		this.hiddenCells = new Array<Vector2>();
+		visibleEnemies = new Vector2[0];
 		file = "";
 	}
 	
@@ -243,8 +245,6 @@ public class Level {
 			for(int y = 0; y < mapHeight; y++){
 				Vector2 cell = new Vector2(x, y);
 				
-				//System.out.println("!" + visibleCell + ".equals(" + cell + ")  && !" + hiddenCells.contains(cell, true));
-				
 				boolean contains = false;
 
 				for(Vector2 visibleCell : visibleCells){
@@ -258,6 +258,41 @@ public class Level {
 					hiddenCells.add(cell);
 			}
 		}
+		
+		//Also calculate the visible enemies here
+		for(Vector2 cell : visibleEnemies){
+			Character c = characterInCell(cell);
+			if(c != null){
+				game.destroy(c);
+			}
+			
+			Player enemy = new Player(null);
+			
+			if(game.player().team() == Player.Team.Seeker){
+				enemy.team(Player.Team.Sneaker);
+			}else{
+				enemy.team(Player.Team.Seeker);
+			}
+			
+			if(!hiddenCells.contains(cell, false)){
+				c = (Character)game.spawn(new Character(enemy, game));
+				c.tile((int)cell.x, (int)cell.y); //Need to use tile here because we don't want to recalculate lighting for the enemy characters	
+			}
+		}
+	}
+	
+	public Character characterInCell(Vector2 cell){
+		for(Entity ent : game.entities()){
+			if(ent instanceof Character){
+				Character c = (Character)ent;
+				
+				if(c.index().equals(cell)){
+					return c;
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	//Recieves hidden cells from the server and stores it locally
