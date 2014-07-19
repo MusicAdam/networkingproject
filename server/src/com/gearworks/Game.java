@@ -72,6 +72,7 @@ public class Game implements ApplicationListener {
 		idlePlayers = new Array<ServerPlayer>();
 		players = new Array<ServerPlayer>();
 		removePlayerQueue = new ConcurrentLinkedQueue<ServerPlayer>();
+		messageQueue = new ConcurrentLinkedQueue<Message>();
 		
 		//Setup Server
 		server = new Server();

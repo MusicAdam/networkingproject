@@ -68,6 +68,10 @@ public class Character extends Entity {
 		Array<Vector2> visibleCells = game.level().calculateLighting(player);
 		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
 		game.level().calculateHiddenCells(visibleArray);
+		
+		if(game.level().checkVictory(player)){
+			System.out.println("YOU WIN! Technically.");
+		}
 	}
 	
 	@Override

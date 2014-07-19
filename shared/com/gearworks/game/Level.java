@@ -33,7 +33,7 @@ public class Level {
 	protected Array<Vector2> seekerSpawns;
 	protected Vector2 sneakerSpawn;
 	protected Array<Vector2> hiddenCells;
-	protected Vector2[] visibleEnemies;
+	protected Vector2[] visibleEnemies; //Misnomer, this refers to all enemies, not just visible ones
 	protected int mapWidth;
 	protected int mapHeight;
 	protected String file;
@@ -315,26 +315,18 @@ public class Level {
 	
 	public String file(){ return file; }
 	
-	private boolean checkVictory(Instance i){
-		ServerPlayer p1 = i.activePlayer();
-		ServerPlayer p2;
-		
-		if(i.players()[0] == i.activePlayer()){
-			p2 = i.players()[1];
-		}
-		else
-			p2 = i.players()[0];
+	public boolean checkVictory(Player p1){
 		
 		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
 			for(int j = 0; j < p1.characters().size; j++){
-				if(p1.characters().get(j).index() == p2.characters().get(0).index()){
+				if(p1.characters().get(j).index().equals(visibleEnemies[0])){
 					return true;
 				}//end inner if
 			}//end for
 		}//end outer if
 		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
-			for(int j = 0; j < p2.characters().size; j++){
-				if(p2.characters().get(j).index() == p1.characters().get(0).index()){
+			for(int j = 0; j < visibleEnemies.length; j++){
+				if(visibleEnemies[j].equals(p1.characters().get(0).index())){
 					return true;
 				}//end inner if
 			}//end for
