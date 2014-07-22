@@ -36,6 +36,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.shared.*;
+import com.gearworks.shared.Character;
 import com.gearworks.game.ClientLevel;
 import com.gearworks.game.Level;
 import com.gearworks.state.ConnectState;
@@ -76,6 +77,8 @@ public class Game implements ApplicationListener {
 	private Player player;
 	
 	private String mapToLoad;
+	
+	private boolean active;
 	
 	Skin skin;
 	Stage stage;
@@ -324,6 +327,19 @@ public class Game implements ApplicationListener {
 		return sm.setState(s);
 	}
 	
+	public void sendEndTurnMessage(){
+		EndTurn end = new EndTurn();
+		end.instanceId = player.instanceId();
+		
+		int i = 0;
+		for(Character c : player.characters()){
+			end.index(i, c.index());
+			i++;
+		}
+		
+		client.sendTCP(end);
+	}
+	
 
 	//Since we may receive the start turn message before the level has been loaded we need to be able to queue the messages to process when appropriate
 	public void queueVisibleCells(Vector2[] visibleCells){
@@ -333,4 +349,8 @@ public class Game implements ApplicationListener {
 	public void queueVisibleEnemies(Vector2[] visibleEnemies){
 		visibleEnemyQueue.add(visibleEnemies);
 	}
+	
+	public void setActive(){ active = true; }
+	public void setInactive(){ active = false; }
+	public boolean isActive(){ return active; }
 }

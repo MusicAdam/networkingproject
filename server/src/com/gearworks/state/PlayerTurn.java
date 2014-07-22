@@ -32,24 +32,17 @@ public class PlayerTurn implements State {
 	public void onEnter(Game game) {
 		System.out.println("[PlayerTurn::onEnter]");
 		
+		//If its the first turn make sure one of the players is active
 		if(instance.activePlayer() == null){
 			instance.activePlayer(instance.players()[0]);
-		}else{
-			if(instance.activePlayer().equals(instance.players()[0])){
-				instance.activePlayer(instance.players()[1]);
-			}else{
-				instance.activePlayer(instance.players()[0]);
-			}
 		}
 		
 		StartTurn msg = new StartTurn();
 
 		for(Player pl : instance.players()){
 			msg.active = (instance.activePlayer() == pl);
-			System.out.println("Player team: " + pl.team());
 			msg.visibleCells = instance.level().calculateLighting(pl).toArray(Vector2.class);
 			msg.visibleEnemies = instance.level().calculateVisibleEnemies(pl, msg.visibleCells).toArray(Vector2.class);
-			System.out.println("\tCharacter: " + msg.visibleEnemies.length);
 			
 			pl.connection().sendTCP(msg);
 		}
@@ -68,8 +61,7 @@ public class PlayerTurn implements State {
 
 	@Override
 	public boolean canExitState(Game game) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

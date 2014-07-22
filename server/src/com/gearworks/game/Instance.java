@@ -1,13 +1,16 @@
 package com.gearworks.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.Game;
 import com.gearworks.shared.Player;
 import com.gearworks.state.InstanceInitState;
 import com.gearworks.state.PlayerTurn;
+import com.gearworks.state.ProcessTurn;
 import com.gearworks.state.StateManager;
+import com.gearworks.shared.Character;
 
 /** An instance is the representation of a game in which two players have been matched */
 public class Instance extends Listener{
@@ -95,5 +98,12 @@ public class Instance extends Listener{
 
 	public StateManager sm() {
 		return sm;
+	}
+	
+	public void endTurnReceived(Vector2[] moves){
+		//Update positions for active player
+		ServerPlayer pl = activePlayer();
+		
+		sm.setState(new ProcessTurn(this, moves));
 	}
 }

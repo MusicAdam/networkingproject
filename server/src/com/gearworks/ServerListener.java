@@ -37,15 +37,12 @@ public class ServerListener extends Listener{
 	
 	@Override
 	 public void received (Connection connection, Object object) {
-		
 		if(object instanceof ConnectMessage){
 			ConnectMessage msg = (ConnectMessage)object;
 			
-			System.out.println("Attempting to get instance: " + msg.instanceId);
 			Instance instance = game.getInstance(msg.instanceId);
 			Player pl = instance.getPlayerByConnection(connection);
 			pl.instanceId(msg.instanceId);
-			System.out.println("Player inst in list: " + pl.instanceId());
 		}
 		
 		if (object instanceof EndTurn){

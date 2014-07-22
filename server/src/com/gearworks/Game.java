@@ -184,11 +184,9 @@ public class Game implements ApplicationListener {
 	private void processMessage(Message poll) {
 		 if(poll instanceof EndTurn){
 			 EndTurn et = (EndTurn)poll;
-			 if(checkVictory(this.getInstance(et.index()))){
-				 //thegamesover
-			 }
+			 Instance inst = getInstance(et.instanceId);
+			 inst.endTurnReceived(et.indices());
 		 }
-		
 	}
 	
 	private boolean checkVictory(Instance i){

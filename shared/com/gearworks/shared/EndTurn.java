@@ -14,21 +14,22 @@ import com.badlogic.gdx.math.Vector2;
 
 public class EndTurn extends Message {
 	
-	private int index;
+	private Vector2[] indices;
+	public int instanceId;
 	
 	
-	public EndTurn(int i){
-		index(i);
+	public EndTurn(){
+		indices = new Vector2[3];
 	}
 
 
-	public int index() {
-		return index;
+	public Vector2[] indices() {
+		return indices;
 	}
 
 
-	public void index(int index) {
-		this.index = index;
+	public void index(int i, Vector2 index) {
+		indices[i] = index;
 	}
 		
 }
