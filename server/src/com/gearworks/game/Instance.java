@@ -19,7 +19,7 @@ public class Instance extends Listener{
 	
 	private ServerPlayer[] 		players;			//Array containing matched players.
 	private ServerPlayer 		activePlayer;		//The player whose turn it is.
-	private int	   		turnsLeft;			//Number of turns left
+	private int	   		turncount;			//Number of turns that have passed since the current round began
 	private int			round;				//The current round
 	private int			id;					//Used to ID instance
 	private ServerLevel		level;				//Instance of the level we are on, used to validate poisitions and calculate vision
@@ -33,8 +33,8 @@ public class Instance extends Listener{
 		this.id = id;
 		System.out.println("Instance id: " + id);
 		players 	= new ServerPlayer[]{p1, p2};
-		turnsLeft 	= NUM_TURNS;
-		round		= 1;
+		turncount(0);
+		round(1);
 		
 		level = new ServerLevel(game);
 		level.load("assets/map1.tmx");
@@ -95,5 +95,21 @@ public class Instance extends Listener{
 
 	public StateManager sm() {
 		return sm;
+	}
+
+	public int turncount() {
+		return turncount;
+	}
+
+	public void turncount(int turncount) {
+		this.turncount = turncount;
+	}
+
+	public int round() {
+		return round;
+	}
+
+	public void round(int round) {
+		this.round = round;
 	}
 }

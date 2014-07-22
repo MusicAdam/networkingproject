@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
+import com.gearworks.shared.Player.Team;
 
 public class Character extends Entity {
 	public static final int SNEAKER_RADIUS = 5;
@@ -69,9 +70,7 @@ public class Character extends Entity {
 		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
 		game.level().calculateHiddenCells(visibleArray);
 		
-		if(game.level().checkVictory(player)){
-			System.out.println("YOU WIN! Technically.");
-		}
+		
 	}
 	
 	@Override

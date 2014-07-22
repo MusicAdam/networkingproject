@@ -36,6 +36,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gearworks.shared.*;
+import com.gearworks.shared.Player.Team;
 import com.gearworks.game.ClientLevel;
 import com.gearworks.game.Level;
 import com.gearworks.state.ConnectState;
@@ -323,7 +324,7 @@ public class Game implements ApplicationListener {
 	public boolean setState(State s){
 		return sm.setState(s);
 	}
-	
+
 
 	//Since we may receive the start turn message before the level has been loaded we need to be able to queue the messages to process when appropriate
 	public void queueVisibleCells(Vector2[] visibleCells){

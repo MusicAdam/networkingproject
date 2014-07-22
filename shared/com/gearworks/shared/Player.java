@@ -15,7 +15,7 @@ public class Player {
 	
 	protected Team	team;		//Either seeker or sneeker	
 							  	//or sneaking = false and you are the controlling the seekers
-	protected int 	score;		//fairly obvious, keeps track of score
+	private int 	score;		//fairly obvious, keeps track of score
 	protected boolean active;		//This keeps track of what player is active aka who's turn it is
 	private int 	instanceId;			//Unique instace id assigned by the server once a connection has been made
 	protected Array<Character>	characters;	//The player's characters.
@@ -47,4 +47,12 @@ public class Player {
 	public void team(Team t){ team = t; }
 	public Array<Character> characters(){ return characters; }
 	public Connection connection(){return connection;}
+
+	public int score() {
+		return score;
+	}
+
+	public void score(int score) {
+		this.score = score;
+	}
 }
