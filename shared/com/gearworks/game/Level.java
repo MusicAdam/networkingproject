@@ -25,6 +25,7 @@ import com.gearworks.shared.Player.Team;
 public class Level {
 	public static final String MAP_LAYER = "map";
 	public static final int	   TILE_SIZE = 32;
+	public static final int TURNS_TO_WIN = 15;
 	
 	public Game game;
 	
@@ -315,28 +316,5 @@ public class Level {
 	
 	public String file(){ return file; }
 	
-	public boolean checkVictory(Player p1){
-		
-		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
-			for(int j = 0; j < p1.characters().size; j++){
-				if(p1.characters().get(j).index().equals(visibleEnemies[0])){
-					return true;
-				}//end inner if
-			}//end for
-		}//end outer if
-		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
-			for(int j = 0; j < visibleEnemies.length; j++){
-				if(visibleEnemies[j].equals(p1.characters().get(0).index())){
-					return true;
-				}//end inner if
-			}//end for
-		}
-		else{
-			System.out.println("Something went wrong checking victory");
-		}
-		
-		return false;
-		
-	}
 	
 }

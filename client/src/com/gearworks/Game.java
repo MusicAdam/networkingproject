@@ -339,7 +339,6 @@ public class Game implements ApplicationListener {
 		
 		client.sendTCP(end);
 	}
-	
 
 	//Since we may receive the start turn message before the level has been loaded we need to be able to queue the messages to process when appropriate
 	public void queueVisibleCells(Vector2[] visibleCells){

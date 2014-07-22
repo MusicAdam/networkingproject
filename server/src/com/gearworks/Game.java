@@ -40,6 +40,7 @@ public class Game implements ApplicationListener {
 	public static final float 	ASPECT_RATIO = (float)V_WIDTH/(float)V_HEIGHT;
 	public static final int 	SCALE = 1;
 	public static final float 	ZOOM = 5;
+	public static final int TURNS_TO_WIN = 15; //number of turns sneaker must evade for to win
 	
 	public static final float STEP = 1 / 60f;
 	private float accum;
@@ -189,7 +190,7 @@ public class Game implements ApplicationListener {
 		 }
 	}
 	
-	private boolean checkVictory(Instance i){
+	private ServerPlayer checkVictory(Instance i){
 		ServerPlayer p1 = i.activePlayer();
 		ServerPlayer p2;
 		
@@ -202,22 +203,30 @@ public class Game implements ApplicationListener {
 		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
 			for(int j = 0; j < p1.characters().size; j++){
 				if(p1.characters().get(j).index() == p2.characters().get(0).index()){
-					return true;
+					System.out.println("Player 1 wins!");
+					p1.score(p1.score() + 1);
+					return p1;
 				}//end inner if
 			}//end for
 		}//end outer if
 		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
 			for(int j = 0; j < p2.characters().size; j++){
 				if(p2.characters().get(j).index() == p1.characters().get(0).index()){
-					return true;
+					System.out.println("Player 2 wins!");
+					p2.score(p2.score() + 1);
+					return p2;
 				}//end inner if
 			}//end for
 		}
-		else{
-			System.out.println("Something went wrong checking victory");
+		//whack fa the daddio
+		if(i.turncount() == TURNS_TO_WIN){ //if sneaker avoids for TURNS_TO_WIN turns, they win lel
+			if(p1.team() == Team.Sneaker)
+				return p1;
+			else
+				return p2;
 		}
 		
-		return false;
+		return null; //if no victory conditions are met, return null
 		
 	}
 
