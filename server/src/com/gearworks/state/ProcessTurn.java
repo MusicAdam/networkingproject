@@ -3,6 +3,7 @@ package com.gearworks.state;
 import com.badlogic.gdx.math.Vector2;
 import com.gearworks.Game;
 import com.gearworks.game.Instance;
+import com.gearworks.game.ServerCharacter;
 import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.Character;
 
@@ -32,9 +33,9 @@ public class ProcessTurn implements State{
 		ServerPlayer pl = instance.activePlayer();
 		
 		int i = 0;
-		for(Character c : pl.characters()){
+		for(ServerCharacter c : pl.serverCharacters()){
 			if(moves[i] != null)
-				c.move((int)moves[i].x, (int)moves[i].y);
+				c.tile((int)moves[i].x, (int)moves[i].y);
 			i++;
 		}
 		
@@ -47,6 +48,7 @@ public class ProcessTurn implements State{
 			instance.activePlayer(instance.players()[0]);
 		}
 		
+		instance.sm().setState(new PlayerTurn(instance));
 	}
 
 	@Override

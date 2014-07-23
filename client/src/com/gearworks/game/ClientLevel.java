@@ -18,7 +18,8 @@ public class ClientLevel extends Level {
 		if(visibleEnemies != null){
 			for(Vector2 cell : visibleEnemies){
 				Character c = characterInCell(cell);
-				game.destroy(c);
+				if(c != null)
+					game.destroy(c);
 			}
 		}
 			
