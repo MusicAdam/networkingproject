@@ -41,7 +41,6 @@ public class ClientListener extends Listener{
 			
 		}else if(object instanceof StartTurn){
 			StartTurn msg = (StartTurn)object;
-			game.queueVisibleCells(msg.visibleCells); //Updates the lighting data
 			game.queueVisibleEnemies(msg.visibleEnemies);
 			
 			if(msg.active){

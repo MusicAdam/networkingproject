@@ -34,7 +34,7 @@ public class ProcessTurn implements State{
 		
 		int i = 0;
 		for(ServerCharacter c : pl.serverCharacters()){
-			if(moves[i] != null)
+			if(i < moves.length && moves[i] != null)
 				c.tile((int)moves[i].x, (int)moves[i].y);
 			i++;
 		}

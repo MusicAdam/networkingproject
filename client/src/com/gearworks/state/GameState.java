@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
 import com.gearworks.shared.Entity;
 
@@ -36,6 +37,11 @@ public class GameState implements State {
 	@Override
 	public void onEnter(Game game) {		
 		game.player().spawnCharacters(game);
+		
+		//Calc initial lighting
+		Array<Vector2> visibleCells = game.level().calculateLighting(game.player());
+		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
+		game.level().calculateHiddenCells(visibleArray);
 		System.out.println("Player id: " + game.player().instanceId());
 		System.out.println("[GameState::onEnter]");
 	}

@@ -13,6 +13,5 @@ import com.badlogic.gdx.math.Vector2;
 
 public class StartTurn extends Message {
 	public boolean active;
-	public Vector2[] visibleCells;    //Locations that the player cannot see
 	public Vector2[] visibleEnemies; //Locations of enemies (seeker/seeker will be determined clientside)
 }
