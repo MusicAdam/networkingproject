@@ -138,7 +138,7 @@ public class Game implements ApplicationListener {
 		
 
 		//GUI
-		/*
+		
 		skin = new Skin();
 		stage = new Stage();
 		
@@ -158,37 +158,48 @@ public class Game implements ApplicationListener {
 		textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
 		textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 		textButtonStyle.font = skin.getFont("default");
+		
 		skin.add("default", textButtonStyle);
 
+		// Texture for background 
+		Texture backgroundTexture= new Texture("assets/splashscreen.png");
+		Image background = new Image(backgroundTexture);
+		stage.addActor(background);
+		
 		// Create a table that fills the screen. Everything else will go inside this table.
 		Table table = new Table();
 		table.setFillParent(true);
 		stage.addActor(table);
 
-		// Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-		final TextButton button = new TextButton("Click me!", skin);
-		table.add(button);
-
+		// Create a play button
+		final TextButton playButton = new TextButton("Play", skin);
+		playButton.setPosition(310,270);
+		playButton.setSize(150,70);
+		playButton.setColor(0,0,0,0);
+		stage.addActor(playButton);
+		
 		// Add a listener to the button. ChangeListener is fired when the button's checked state changes, eg when clicked,
 		// Button#setChecked() is called, via a key press, etc. If the event.cancel() is called, the checked state will be reverted.
 		// ClickListener could have been used, but would only fire when clicked. Also, canceling a ClickListener event won't
 		// revert the checked state.
-		button.addListener(new ChangeListener() {
+		playButton.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Clicked! Is checked: " + button.isChecked());
-				button.setText("Good job!");
+			System.out.println("Clicked! Is checked: " + playButton.isChecked());
+			playButton.setText("Good job!");
+			sm.setState(new ConnectState());
+			stage.dispose();
 			}
 		});
 
 		// Add an image actor. Have to set the size, else it would be the size of the drawable (which is the 1x1 texture).
-		table.add(new Image(skin.newDrawable("white", Color.RED))).size(64);
+		//table.add(new Image(skin.newDrawable("white", Color.RED))).size(64);
 
 		inputMultiplexer.addProcessor(stage);
-		*/
+		
 		inputMultiplexer.addProcessor(ui);
 		
-		sm.setState(new ConnectState()); //Set state after we are done initializing everything
+		//sm.setState(new ConnectState()); //Set state after we are done initializing everything
 	}
 
 	@Override
@@ -236,11 +247,11 @@ public class Game implements ApplicationListener {
 		sm.render();
 		ui.render(batch, renderer);
 		
-		//stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-		//stage.draw();
-		//Table.drawDebug(stage);
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+		stage.draw();
+		Table.drawDebug(stage);
 		
-		//fpsLogger.log();
+		fpsLogger.log();
 	}
 
 	@Override
