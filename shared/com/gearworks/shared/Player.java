@@ -46,6 +46,9 @@ public class Player {
 	public Team team(){ return team; }
 	public void team(Team t){ team = t; }
 	public Array<Character> characters(){ return characters; }
+	public void addCharacter(Character c){ characters.add(c); }
+	public void clearCharacters(){ characters.clear(); }
+	public void removeCharacter(Character c){ characters.removeValue(c, true); }
 	public Connection connection(){return connection;}
 
 	public int score() {

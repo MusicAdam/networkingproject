@@ -69,9 +69,10 @@ public class Character extends Entity {
 		Array<Vector2> visibleCells = game.level().calculateLighting(player);
 		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
 		game.level().calculateHiddenCells(visibleArray);
-		
-		
+		game.level().calculateVisibleEnemies();
 	}
+	
+	
 	
 	@Override
 	public void render(SpriteBatch b, ShapeRenderer r){

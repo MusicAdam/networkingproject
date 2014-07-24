@@ -34,7 +34,7 @@ public class ConnectState implements State {
 				if(timeSpent % 10 == 0){ //Attempt to connect every 10 frames
 					try {
 						game.client().addListener(new ClientListener(game, game.client()));
-						game.client().connect(5000, "10.34.23.56", 60420, 60421);
+						game.client().connect(5000, "localhost", 60420, 60421);
 						System.out.println("Connected in " + timeSpent * Game.STEP + " seconds");
 						timeSpent = 0;
 						connectionEstablished = true;

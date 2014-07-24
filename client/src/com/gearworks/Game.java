@@ -75,6 +75,7 @@ public class Game implements ApplicationListener {
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	private Player player;
+	private Player enemy; //Create a dummy enemy to hold the enemy characters
 	
 	private String mapToLoad;
 	
@@ -348,6 +349,9 @@ public class Game implements ApplicationListener {
 	public void queueVisibleEnemies(Vector2[] visibleEnemies){
 		visibleEnemyQueue.add(visibleEnemies);
 	}
+	
+	public void enemy(Player e){ enemy = e; }
+	public Player enemy(){ return enemy; }
 	
 	public void setActive(){ active = true; }
 	public void setInactive(){ active = false; }

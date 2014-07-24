@@ -169,118 +169,74 @@ public class Level {
 	}
 	
 	//Calculates what a player can see, returns visible cells
-	public Array<Vector2> calculateLighting(Player player){
-		hiddenCells = new Array<Vector2>();
-		
-		Array<Vector2> visibleCells = new Array<Vector2>();
-		for(Character c : player.characters()){
-			Vector2 index = c.index();
+		public Array<Vector2> calculateLighting(Player player){
+			hiddenCells = new Array<Vector2>();
 			
-			//Add the cell character is in
-			visibleCells.add(c.index());
-			
-			//Handle seeker vision
-			if(player.team() == Player.Team.Seeker){
-				int pos = 1;
+			Array<Vector2> visibleCells = new Array<Vector2>();
+			for(Character c : player.characters()){
+				Vector2 index = c.index();
 				
-				//Calculate cells up
-				while(!isWall((int)index.x, (int)index.y + pos)){
-					visibleCells.add(new Vector2(index.x, index.y + pos));
-					pos++;
-				}
+				//Add the cell character is in
+				visibleCells.add(c.index());
 				
-				pos = 1;
-				
-				//Calculate cells down
-				while(!isWall((int)index.x, (int)index.y - pos)){
-					visibleCells.add(new Vector2(index.x, index.y - pos));
-					pos++;
-				}
-				
-				pos = 1;
-				
-				//Calculate cells left
-				while(!isWall((int)index.x - pos, (int)index.y)){
-					visibleCells.add(new Vector2(index.x - pos, index.y));
-					pos++;
-				}
-				
-				pos = 1;
-				
-				//Calculate cells right
-				while(!isWall((int)index.x + pos, (int)index.y)){
-					visibleCells.add(new Vector2(index.x + pos, index.y));
-					pos++;
-				}
-			}else{ //Handle sneaker vision
-				//x^2 + y^2 = r
-				//x = sqrt(r-y^2)
-				//y = sqrt(r-x^2)
-				
-				float rsquared = (float) Math.pow(Character.SNEAKER_RADIUS, 2);
-				
-				//This isn't very efficient, have to iterate whole map twice (once here then once to invert)
-				for(int x = 0; x < mapWidth; x++){
-					for(int y = 0; y < mapHeight; y++){
-						int cx1 = (int)index.x + (int)Math.floor(Math.sqrt(rsquared - Math.pow(y - index.y, 2)));
-						int cx2 = (int)index.x - (int)Math.floor(Math.sqrt(rsquared - Math.pow(y - index.y, 2)));
-						int cy1 = (int)index.y + (int)Math.floor(Math.sqrt(rsquared - Math.pow(x - index.x, 2)));
-						int cy2 = (int)index.y - (int)Math.floor(Math.sqrt(rsquared - Math.pow(x - index.x, 2)));
-						
-						if(x < cx1 && y < cy1 && x > cx2 && y > cy2){
-							visibleCells.add(new Vector2(x, y));
+				//Handle seeker vision
+				if(player.team() == Player.Team.Seeker){
+					int pos = 1;
+					
+					//Calculate cells up
+					while(!isWall((int)index.x, (int)index.y + pos)){
+						visibleCells.add(new Vector2(index.x, index.y + pos));
+						pos++;
+					}
+					
+					pos = 1;
+					
+					//Calculate cells down
+					while(!isWall((int)index.x, (int)index.y - pos)){
+						visibleCells.add(new Vector2(index.x, index.y - pos));
+						pos++;
+					}
+					
+					pos = 1;
+					
+					//Calculate cells left
+					while(!isWall((int)index.x - pos, (int)index.y)){
+						visibleCells.add(new Vector2(index.x - pos, index.y));
+						pos++;
+					}
+					
+					pos = 1;
+					
+					//Calculate cells right
+					while(!isWall((int)index.x + pos, (int)index.y)){
+						visibleCells.add(new Vector2(index.x + pos, index.y));
+						pos++;
+					}
+				}else{ //Handle sneaker vision
+					//x^2 + y^2 = r
+					//x = sqrt(r-y^2)
+					//y = sqrt(r-x^2)
+					
+					float rsquared = (float) Math.pow(Character.SNEAKER_RADIUS, 2);
+					
+					//This isn't very efficient, have to iterate whole map twice (once here then once to invert)
+					for(int x = 0; x < mapWidth; x++){
+						for(int y = 0; y < mapHeight; y++){
+							int cx1 = (int)index.x + (int)Math.floor(Math.sqrt(rsquared - Math.pow(y - index.y, 2)));
+							int cx2 = (int)index.x - (int)Math.floor(Math.sqrt(rsquared - Math.pow(y - index.y, 2)));
+							int cy1 = (int)index.y + (int)Math.floor(Math.sqrt(rsquared - Math.pow(x - index.x, 2)));
+							int cy2 = (int)index.y - (int)Math.floor(Math.sqrt(rsquared - Math.pow(x - index.x, 2)));
+							
+							if(x < cx1 && y < cy1 && x > cx2 && y > cy2){
+								visibleCells.add(new Vector2(x, y));
+							}
 						}
 					}
 				}
 			}
-		}
 
-		return visibleCells;
-	}
-	
-	public void calculateHiddenCells(Vector2[] visibleCells){
-		hiddenCells = new Array<Vector2>();
-		
-
-		for(int x = 0; x < mapWidth; x++){
-			for(int y = 0; y < mapHeight; y++){
-				Vector2 cell = new Vector2(x, y);
-				
-				boolean contains = false;
-
-				for(Vector2 visibleCell : visibleCells){
-					if(visibleCell.equals(cell)){
-						contains = true;
-						break;
-					}
-				}
-				
-				if(!contains)
-					hiddenCells.add(cell);
-			}
+			return visibleCells;
 		}
-		
-		//Also calculate the visible enemies here
-		for(Vector2 cell : visibleEnemies){
-			Character c = characterInCell(cell);
-			if(c != null){
-				game.destroy(c);
-			}
-			
-			Player enemy = new Player(null);
-			
-			if(game.player().team() == Player.Team.Seeker){
-				enemy.team(Player.Team.Sneaker);
-			}else{
-				enemy.team(Player.Team.Seeker);
-			}
-			
-			if(!hiddenCells.contains(cell, false)){
-				c = (Character)game.spawn(new Character(enemy, game));
-				c.tile((int)cell.x, (int)cell.y); //Need to use tile here because we don't want to recalculate lighting for the enemy characters	
-			}
-		}
-	}
 	
 	public Character characterInCell(Vector2 cell){
 		for(Entity ent : game.entities()){
@@ -290,6 +246,8 @@ public class Level {
 				if(c.index().equals(cell)){
 					return c;
 				}
+			}else{
+				System.out.println(ent.getClass().getCanonicalName() + " is not a character");
 			}
 		}
 		

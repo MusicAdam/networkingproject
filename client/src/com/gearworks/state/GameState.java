@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gearworks.Game;
 import com.gearworks.shared.Entity;
+import com.gearworks.shared.Player;
 
 public class GameState implements State {
 	private static int ID = 0;
@@ -35,14 +36,23 @@ public class GameState implements State {
 	}
 
 	@Override
-	public void onEnter(Game game) {		
+	public void onEnter(Game game) {
+		//Setup dummy enemy
+		game.enemy(new Player(null));
+		if(game.player().team() == Player.Team.Seeker){
+			game.enemy().team(Player.Team.Sneaker);
+		}else{
+			game.enemy().team(Player.Team.Seeker);			
+		}
+		game.enemy().spawnCharacters(game);
+		
 		game.player().spawnCharacters(game);
 		
 		//Calc initial lighting
 		Array<Vector2> visibleCells = game.level().calculateLighting(game.player());
 		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
 		game.level().calculateHiddenCells(visibleArray);
-		System.out.println("Player id: " + game.player().instanceId());
+
 		System.out.println("[GameState::onEnter]");
 	}
 
@@ -58,7 +68,7 @@ public class GameState implements State {
 
 	@Override
 	public boolean canExitState(Game game) {
-		return false;
+		return true;
 	}
 	
 	@Override
