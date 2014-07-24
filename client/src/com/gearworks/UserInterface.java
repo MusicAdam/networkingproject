@@ -53,39 +53,41 @@ public class UserInterface implements InputProcessor{
 		inputMapper.put("down", Input.Keys.DOWN);
 		inputMapper.put("down", Input.Keys.S);
 		inputMapper.put("cycle", Input.Keys.TAB);
+		inputMapper.put("endturn", Input.Keys.SPACE);
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if(inputMapper.getMapping(keycode) == "up"){
+		String mapping = inputMapper.getMapping(keycode);
+		if(mapping == "up" && game.isActive()){
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x, (int)index.y + 1);
 			}
 		}
 		
-		if(inputMapper.getMapping(keycode) == "left"){
+		if(mapping == "left" && game.isActive()){
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x - 1, (int)index.y);
 			}
 		}
 		
-		if(inputMapper.getMapping(keycode) == "down"){
+		if(mapping == "down" && game.isActive()){
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x, (int)index.y - 1);
 			}
 		}
 		
-		if(inputMapper.getMapping(keycode) == "right"){
+		if(mapping == "right" && game.isActive()){
 			if(activeCharacter != null){
 				Vector2 index = game.level().indexFromPosition(activeCharacter.position());
 				activeCharacter.move((int)index.x + 1, (int)index.y);
 			}
 		}
 		
-		if(inputMapper.getMapping(keycode) == "cycle"){
+		if(mapping == "cycle"){
 			if(activeCharacter == null){
 				activeCharacter = game.player().characters().first();
 			}else{
@@ -105,6 +107,12 @@ public class UserInterface implements InputProcessor{
 				}
 			}
 		}
+		
+		if(mapping == "endturn" && game.isActive()){
+			game.sendEndTurnMessage();
+			game.setInactive();
+		}
+		
 		return true;
 	}
 

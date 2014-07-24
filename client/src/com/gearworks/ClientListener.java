@@ -28,7 +28,7 @@ public class ClientListener extends Listener{
 		System.out.println("Connected");
 	}
 	
-	public void received (Connection connection, Object object){
+	public void received (Connection connection, Object object){	
 		if(object instanceof GameFullMessage){
 			//SOMEHOW DISPLAY IT TO THE PLAYERS
 			GameFullMessage gfm = (GameFullMessage) object;
@@ -41,22 +41,23 @@ public class ClientListener extends Listener{
 			
 		}else if(object instanceof StartTurn){
 			StartTurn msg = (StartTurn)object;
-			System.out.println(game.level());
-			game.queueVisibleCells(msg.visibleCells); //Updates the lighting data
 			game.queueVisibleEnemies(msg.visibleEnemies);
 			
-			//if(msg.active.id() == game.player().id()){
-			//	game.setActive(); //Tell the game its now our turn
-			//}
+			if(msg.active){
+				game.setActive();
+			}else{
+				game.setInactive();
+			}
 		
 		//When ConnectMessage is received we have been matched and a server has created our game instance
-		}else if(object instanceof ConnectMessage){
+		}else if(object instanceof ConnectMessage && game.state() instanceof ConnectState){
 			ConnectMessage msg = (ConnectMessage)object;
 			Player player = new Player(connection);
 			player.instanceId(msg.instanceId);
 			player.team(msg.team);
 			
 			game.player(player);
+			
 			((ConnectState)game.state()).mapName(msg.mapName);
 			
 			//Send the message back to complete handshake

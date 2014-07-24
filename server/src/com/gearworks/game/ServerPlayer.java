@@ -1,6 +1,7 @@
 package com.gearworks.game;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryonet.Connection;
 import com.gearworks.Game;
 import com.gearworks.shared.Character;
@@ -25,6 +26,17 @@ public class ServerPlayer extends Player {
 				characters.add(seeker);
 			}
 		}
+	}
+	
+	public Array<ServerCharacter> serverCharacters(){
+		Array<ServerCharacter> serverCharacters = new Array<ServerCharacter>();
+		for(Character c : characters){
+			if(c instanceof ServerCharacter){
+				serverCharacters.add((ServerCharacter)c);
+			}
+		}
+		
+		return serverCharacters;
 	}
 
 }

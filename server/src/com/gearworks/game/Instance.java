@@ -1,13 +1,16 @@
 package com.gearworks.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.Game;
 import com.gearworks.shared.Player;
 import com.gearworks.state.InstanceInitState;
 import com.gearworks.state.PlayerTurn;
+import com.gearworks.state.ProcessTurn;
 import com.gearworks.state.StateManager;
+import com.gearworks.shared.Character;
 
 /** An instance is the representation of a game in which two players have been matched */
 public class Instance extends Listener{
@@ -19,7 +22,7 @@ public class Instance extends Listener{
 	
 	private ServerPlayer[] 		players;			//Array containing matched players.
 	private ServerPlayer 		activePlayer;		//The player whose turn it is.
-	private int	   		turnsLeft;			//Number of turns left
+	private int	   		turncount;			//Number of turns that have passed since the current round began
 	private int			round;				//The current round
 	private int			id;					//Used to ID instance
 	private ServerLevel		level;				//Instance of the level we are on, used to validate poisitions and calculate vision
@@ -33,8 +36,8 @@ public class Instance extends Listener{
 		this.id = id;
 		System.out.println("Instance id: " + id);
 		players 	= new ServerPlayer[]{p1, p2};
-		turnsLeft 	= NUM_TURNS;
-		round		= 1;
+		turncount(0);
+		round(1);
 		
 		level = new ServerLevel(game);
 		level.load("assets/map1.tmx");
@@ -65,7 +68,6 @@ public class Instance extends Listener{
 	
 	//Returns true after both clients have completed the conection handshake
 	public boolean clientsReady() {
-		System.out.println("CLient is ready: " + (players[0].instanceId() == id && players[1].instanceId() == id));
 		return (players[0].instanceId() == id && players[1].instanceId() == id);
 	}
 	
@@ -96,5 +98,28 @@ public class Instance extends Listener{
 
 	public StateManager sm() {
 		return sm;
+	}
+	
+	public void endTurnReceived(Vector2[] moves){
+		//Update positions for active player
+		ServerPlayer pl = activePlayer();
+		
+		sm.setState(new ProcessTurn(this, moves));
+	}
+
+	public int turncount() {
+		return turncount;
+	}
+
+	public void turncount(int turncount) {
+		this.turncount = turncount;
+	}
+
+	public int round() {
+		return round;
+	}
+
+	public void round(int round) {
+		this.round = round;
 	}
 }

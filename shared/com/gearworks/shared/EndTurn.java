@@ -14,23 +14,22 @@ import com.badlogic.gdx.math.Vector2;
 
 public class EndTurn extends Message {
 	
-	ArrayList<Vector2> positions;
+	private Vector2[] indices;
+	public int instanceId;
 	
 	
-
-	public EndTurn(ArrayList<Vector2> pos){
-		//I guess all this needs is the positions of the units
-		for(Vector2 v : pos){
-			positions.add(v);
-		}
-		
-	}
-	public ArrayList<Vector2> positions() {
-		return positions;
+	public EndTurn(){
+		indices = new Vector2[3];
 	}
 
-	public void positions(ArrayList<Vector2> positions) {
-		this.positions = positions;
+
+	public Vector2[] indices() {
+		return indices;
+	}
+
+
+	public void index(int i, Vector2 index) {
+		indices[i] = index;
 	}
 		
 }

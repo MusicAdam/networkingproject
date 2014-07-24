@@ -28,6 +28,7 @@ import com.gearworks.game.Level;
 import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.*;
 import com.gearworks.shared.Character;
+import com.gearworks.shared.Player.Team;
 import com.gearworks.state.ReadyState;
 import com.gearworks.state.State;
 import com.gearworks.state.StateManager;
@@ -39,6 +40,7 @@ public class Game implements ApplicationListener {
 	public static final float 	ASPECT_RATIO = (float)V_WIDTH/(float)V_HEIGHT;
 	public static final int 	SCALE = 1;
 	public static final float 	ZOOM = 5;
+	public static final int TURNS_TO_WIN = 15; //number of turns sneaker must evade for to win
 	
 	public static final float STEP = 1 / 60f;
 	private float accum;
@@ -59,7 +61,7 @@ public class Game implements ApplicationListener {
 	private Array<ServerPlayer> players; 				//All currently connected players
 	private Array<Instance> instances;					//This is a list of all the active games
 	private Queue<ServerPlayer> removePlayerQueue;		//Disconnected players waiting to be cleaned
-
+	private Queue<Message> messageQueue;				//Guess LEL
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	
@@ -71,6 +73,7 @@ public class Game implements ApplicationListener {
 		idlePlayers = new Array<ServerPlayer>();
 		players = new Array<ServerPlayer>();
 		removePlayerQueue = new ConcurrentLinkedQueue<ServerPlayer>();
+		messageQueue = new ConcurrentLinkedQueue<Message>();
 		
 		//Setup Server
 		server = new Server();
@@ -159,6 +162,9 @@ public class Game implements ApplicationListener {
 			//process queues
 			if(!removePlayerQueue.isEmpty())
 				removePlayer(removePlayerQueue.poll());
+			if(!messageQueue.isEmpty()){
+				this.processMessage(messageQueue.poll());
+			}
 			
 			sm.update();
 			camera.update();
@@ -174,6 +180,54 @@ public class Game implements ApplicationListener {
 		ui.render(batch, renderer);
 		
 		//fpsLogger.log();
+	}
+
+	private void processMessage(Message poll) {
+		 if(poll instanceof EndTurn){
+			 EndTurn et = (EndTurn)poll;
+			 Instance inst = getInstance(et.instanceId);
+			 inst.endTurnReceived(et.indices());
+		 }
+	}
+	
+	private ServerPlayer checkVictory(Instance i){
+		ServerPlayer p1 = i.activePlayer();
+		ServerPlayer p2;
+		
+		if(i.players()[0] == i.activePlayer()){
+			p2 = i.players()[1];
+		}
+		else
+			p2 = i.players()[0];
+		
+		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
+			for(int j = 0; j < p1.characters().size; j++){
+				if(p1.characters().get(j).index() == p2.characters().get(0).index()){
+					System.out.println("Player 1 wins!");
+					p1.score(p1.score() + 1);
+					return p1;
+				}//end inner if
+			}//end for
+		}//end outer if
+		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
+			for(int j = 0; j < p2.characters().size; j++){
+				if(p2.characters().get(j).index() == p1.characters().get(0).index()){
+					System.out.println("Player 2 wins!");
+					p2.score(p2.score() + 1);
+					return p2;
+				}//end inner if
+			}//end for
+		}
+		//whack fa the daddio
+		if(i.turncount() == TURNS_TO_WIN){ //if sneaker avoids for TURNS_TO_WIN turns, they win lel
+			if(p1.team() == Team.Sneaker)
+				return p1;
+			else
+				return p2;
+		}
+		
+		return null; //if no victory conditions are met, return null
+		
 	}
 
 	@Override
@@ -303,5 +357,14 @@ public class Game implements ApplicationListener {
 	
 	public void queueRemovePlayer(ServerPlayer pl){
 		removePlayerQueue.add(pl);
+	}
+
+	public Queue<Message> messageQueue() {
+		return messageQueue;
+	}
+
+	public void addToMessageQueue(Message m) {
+		messageQueue.add(m);
+		
 	}
 }
