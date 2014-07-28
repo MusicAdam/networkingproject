@@ -65,7 +65,6 @@ public class Game implements ApplicationListener {
 	private Rectangle viewport;
 	private boolean updateViewport;
 	private OrthographicCamera camera;
-	private FPSLogger fpsLogger;
 	private InputMultiplexer inputMultiplexer;
 	private UserInterface ui;
 	private ArrayList<Entity> entities;
@@ -85,9 +84,7 @@ public class Game implements ApplicationListener {
 	Stage stage;
 	
 	@Override
-	public void create() {	
-		fpsLogger = new FPSLogger();
-		
+	public void create() {			
 		entities = new ArrayList<Entity>();
 		visibleCellQueue = new ConcurrentLinkedQueue<Vector2[]>();
 		visibleEnemyQueue = new ConcurrentLinkedQueue<Vector2[]>();
@@ -250,8 +247,6 @@ public class Game implements ApplicationListener {
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 		Table.drawDebug(stage);
-		
-		fpsLogger.log();
 	}
 
 	@Override
