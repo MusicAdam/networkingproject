@@ -61,6 +61,7 @@ public class Game implements ApplicationListener {
 	protected StateManager sm;
 	protected Queue<Vector2[]> visibleCellQueue;
 	protected Queue<Vector2[]> visibleEnemyQueue;
+	protected Queue<Message> messageQueue;
 	
 	private Rectangle viewport;
 	private boolean updateViewport;
@@ -75,6 +76,9 @@ public class Game implements ApplicationListener {
 	private ShapeRenderer renderer;
 	private Player player;
 	private Player enemy; //Create a dummy enemy to hold the enemy characters
+	private int turncount;
+	private int movesLeft;
+	private int round;
 	
 	private String mapToLoad;
 	
@@ -88,6 +92,7 @@ public class Game implements ApplicationListener {
 		entities = new ArrayList<Entity>();
 		visibleCellQueue = new ConcurrentLinkedQueue<Vector2[]>();
 		visibleEnemyQueue = new ConcurrentLinkedQueue<Vector2[]>();
+		messageQueue = new ConcurrentLinkedQueue<Message>();
 		
 		inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
@@ -132,6 +137,7 @@ public class Game implements ApplicationListener {
 		kryo.register(Vector2[].class);
 		kryo.register(ArrayIterable.class);
 		kryo.register(Vector2.class);
+		kryo.register(InitRoundMessage.class);
 		
 
 		//GUI
@@ -356,10 +362,24 @@ public class Game implements ApplicationListener {
 		visibleEnemyQueue.add(visibleEnemies);
 	}
 	
+	public void queueMessage(Message msg){
+		messageQueue.add(msg);
+	}
+	
+	public Queue<Message> messageQueue(){
+		return messageQueue;
+	}
+	
 	public void enemy(Player e){ enemy = e; }
 	public Player enemy(){ return enemy; }
 	
 	public void setActive(){ active = true; }
 	public void setInactive(){ active = false; }
 	public boolean isActive(){ return active; }
+	public void turncount(int count){ turncount = count; }
+	public int turncount(){ return turncount; }
+	public int round(){ return round; }
+	public void round(int round){ this.round = round; }
+	public void movesLeft(int ml){ movesLeft= ml; }
+	public int movesLeft(){ return movesLeft; }
 }

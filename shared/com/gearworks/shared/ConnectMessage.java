@@ -9,7 +9,5 @@ package com.gearworks.shared;
 public class ConnectMessage extends Message {
 	
 	public int 			instanceId;		//Server instance id
-	public String 		mapName;		//The id of the map being played on
-	public Player.Team	team;			//The team which the client will start on
 
 }

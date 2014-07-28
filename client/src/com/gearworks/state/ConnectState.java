@@ -17,7 +17,6 @@ public class ConnectState implements State {
 	private float timeout 	=  	30;	//Number of seconds we will try to establish connection to server
 	private float timeSpent =	0;	//Amount of time spent trying to connect, or waiting to find a match (this is reset after connection has been made)
 	private IOException exception;	//The exception thrown if the connection fails.
-	private String mapName; 		//The map sent to us by the server
 	
 	@Override
 	public void render(Game game) {
@@ -46,14 +45,9 @@ public class ConnectState implements State {
 				System.out.println("Timeout: " + exception.getMessage());
 			}
 		}else{
-			if(mapName != null){
-				System.out.println("Creating level");
-				game.level(new ClientLevel(game));
-				game.level().load(mapName);
-			}
 			
-			//Attempt to switch states to the game state (wont happen until we are matched: see canExitState)
-			game.setState(new GameState());
+			//Attempt to switch states to the init round state (wont happen until we are matched: see canExitState)
+			game.setState(new InitRoundState());
 		}
 	}
 
@@ -73,7 +67,6 @@ public class ConnectState implements State {
 
 	@Override
 	public boolean canExitState(Game game) {
-		//The 
 		return (game.player() != null && game.player().instanceId() != -1);
 	}
 
@@ -81,9 +74,4 @@ public class ConnectState implements State {
 	public int getId() {
 		return ID;
 	}
-	
-	public void mapName(String name){
-		mapName = name;
-	}
-
 }

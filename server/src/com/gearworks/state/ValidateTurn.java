@@ -7,11 +7,11 @@ import com.gearworks.game.ServerCharacter;
 import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.Character;
 
-public class ProcessTurn implements State{
+public class ValidateTurn implements State{
 	public Instance instance;
 	private Vector2[] moves;
 	
-	public ProcessTurn(Instance instance, Vector2[] moves){
+	public ValidateTurn(Instance instance, Vector2[] moves){
 		this.instance = instance;
 		this.moves = moves;
 	}
