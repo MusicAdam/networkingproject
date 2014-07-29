@@ -40,9 +40,11 @@ public class Instance extends Listener{
 		round(1);
 		
 		level = new ServerLevel(game);
+
 		int adamsucks = (int)(Math.random()*3+1);		//range of 1-4 randomly chooses the map
 		String map = "assets/map" + adamsucks + ".tmx";
 		level.load(map);
+
 		
 		sm = new StateManager(game);
 	}
