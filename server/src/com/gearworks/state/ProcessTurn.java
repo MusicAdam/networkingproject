@@ -6,6 +6,7 @@ import com.gearworks.game.Instance;
 import com.gearworks.game.ServerCharacter;
 import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.Character;
+import com.gearworks.shared.EndGame;
 
 public class ProcessTurn implements State{
 	public Instance instance;
@@ -18,13 +19,13 @@ public class ProcessTurn implements State{
 
 	@Override
 	public void render(Game game) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		
 	}
 
 	@Override
 	public void update(Game game) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		
 	}
 
@@ -39,7 +40,13 @@ public class ProcessTurn implements State{
 			i++;
 		}
 		
-		//ServerPlayer winner = game.checkVictory(this);
+		ServerPlayer winner = game.checkVictory(instance);
+		
+		if(winner != null){
+			//that player wins.
+			winner.connection().sendTCP(new EndGame("You win!!"));
+			return;
+		}
 		
 		//Toggle active player
 		if(instance.activePlayer().equals(instance.players()[0])){
@@ -48,18 +55,17 @@ public class ProcessTurn implements State{
 			instance.activePlayer(instance.players()[0]);
 		}
 		
-		instance.sm().setState(new PlayerTurn(instance));
+		instance.turncount(instance.turncount() + 1);
+		instance.sm().setState(new PlayerTurn(instance)); //sends new PlayerTurn message
 	}
 
 	@Override
 	public void onExit(Game game) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public boolean canEnterState(Game game) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

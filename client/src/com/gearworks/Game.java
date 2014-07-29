@@ -132,7 +132,7 @@ public class Game implements ApplicationListener {
 		kryo.register(Vector2[].class);
 		kryo.register(ArrayIterable.class);
 		kryo.register(Vector2.class);
-		
+		kryo.register(EndGame.class);
 
 		//GUI
 		

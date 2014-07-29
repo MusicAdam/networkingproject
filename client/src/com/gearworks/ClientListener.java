@@ -63,6 +63,10 @@ public class ClientListener extends Listener{
 			//Send the message back to complete handshake
 			connection.sendTCP(msg);
 		}
+		else if(object instanceof EndGame){
+			EndGame mess = (EndGame) object;
+			System.out.println(mess.message);
+		}
 	}
 
 }

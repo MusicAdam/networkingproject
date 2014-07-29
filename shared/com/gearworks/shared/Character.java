@@ -14,11 +14,13 @@ import com.gearworks.shared.Player.Team;
 
 public class Character extends Entity {
 	public static final int SNEAKER_RADIUS = 5;
+	public static final int NUM_MOVES = 5;
 	
 	private Texture myTexture;
 	private Sprite mySprite;
 	private Player player;
 	protected int x, y;
+	private int moves_left;
 	
 	public Character(Player player, Game cRef) {
 		super(cRef);
@@ -31,6 +33,7 @@ public class Character extends Entity {
 		
 		mySprite = new Sprite(myTexture, 32, 32);
 		size(32, 32);
+		moves_left = NUM_MOVES;
 	}
 	
 	//Sets myCell
@@ -51,25 +54,32 @@ public class Character extends Entity {
 	public void move(int x, int y){
 		if(game.level().isWall(x, y)) return;
 		
-		//Get current x and y
-		int dx = x - this.x;
-		int dy = y - this.y;
-		
-		if(dx < 1 && dy == 0){
-			if(!mySprite.isFlipX())
-				mySprite.flip(true, false);
-		}else if(dy == 0){
-			if(mySprite.isFlipX())
-				mySprite.flip(true, false);			
+		if(moves_left > 0){
+			//Get current x and y
+			int dx = x - this.x;
+			int dy = y - this.y;
+			
+			if(dx < 1 && dy == 0){
+				if(!mySprite.isFlipX())
+					mySprite.flip(true, false);
+			}else if(dy == 0){
+				if(mySprite.isFlipX())
+					mySprite.flip(true, false);			
+			}
+			
+			tile(x, y); //sets tile
+			
+			//Need to continue calculating lighting as the player moves around the map
+			Array<Vector2> visibleCells = game.level().calculateLighting(player);
+			Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
+			game.level().calculateHiddenCells(visibleArray);							//fake error, would throw if this was ever called server-side
+			game.level().calculateVisibleEnemies();										//same^
+			moves_left--;
 		}
-		
-		tile(x, y); //sets tile
-		
-		//Need to continue calculating lighting as the player moves around the map
-		Array<Vector2> visibleCells = game.level().calculateLighting(player);
-		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
-		game.level().calculateHiddenCells(visibleArray);
-		game.level().calculateVisibleEnemies();
+		else{
+			moves_left = NUM_MOVES;
+			game.sendEndTurnMessage();													//hopefully the same type of non-error error
+		}
 	}
 	
 	

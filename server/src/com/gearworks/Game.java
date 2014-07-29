@@ -95,6 +95,7 @@ public class Game implements ApplicationListener {
 		kryo.register(Vector2[].class);
 		kryo.register(ArrayIterable.class);
 		kryo.register(Vector2.class);
+		kryo.register(EndGame.class);
 		
 		server.start();
 		try {
@@ -190,7 +191,7 @@ public class Game implements ApplicationListener {
 		 }
 	}
 	
-	private ServerPlayer checkVictory(Instance i){
+	public ServerPlayer checkVictory(Instance i){
 		ServerPlayer p1 = i.activePlayer();
 		ServerPlayer p2;
 		
@@ -202,7 +203,7 @@ public class Game implements ApplicationListener {
 		
 		if(p1.team() == Team.Seeker){ //if p1 is seeker, p2 must be sneaker
 			for(int j = 0; j < p1.characters().size; j++){
-				if(p1.characters().get(j).index() == p2.characters().get(0).index()){
+				if(p1.characters().get(j).index().epsilonEquals(p2.characters().get(0).index(), 0)){
 					System.out.println("Player 1 wins!");
 					p1.score(p1.score() + 1);
 					return p1;
@@ -211,7 +212,7 @@ public class Game implements ApplicationListener {
 		}//end outer if
 		else if(p1.team() == Team.Sneaker){ //if P1 is sneaker, p2 must be seeker
 			for(int j = 0; j < p2.characters().size; j++){
-				if(p2.characters().get(j).index() == p1.characters().get(0).index()){
+				if(p2.characters().get(j).index().epsilonEquals(p1.characters().get(0).index(), 0)){
 					System.out.println("Player 2 wins!");
 					p2.score(p2.score() + 1);
 					return p2;
@@ -366,5 +367,10 @@ public class Game implements ApplicationListener {
 	public void addToMessageQueue(Message m) {
 		messageQueue.add(m);
 		
+	}
+
+	public Player player() {
+		// TODO Auto-generated method stub created so shut an error message up. GOOD RIDDANCE
+		return null;
 	}
 }
