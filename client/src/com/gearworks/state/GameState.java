@@ -44,7 +44,6 @@ public class GameState implements State {
 		}else{
 			game.enemy().team(Player.Team.Seeker);			
 		}
-		game.enemy().spawnCharacters(game);
 		
 		game.player().spawnCharacters(game);
 		

@@ -40,7 +40,7 @@ public class Instance extends Listener{
 		round(1);
 		
 		level = new ServerLevel(game);
-		level.load("assets/map1.tmx");
+		level.load("assets/map3.tmx");
 		
 		sm = new StateManager(game);
 	}
