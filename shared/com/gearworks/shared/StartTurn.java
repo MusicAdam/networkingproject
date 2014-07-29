@@ -13,5 +13,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class StartTurn extends Message {
 	public boolean active;
+	public int turnsLeft;
 	public Vector2[] visibleEnemies; //Locations of enemies (seeker/seeker will be determined clientside)
 }

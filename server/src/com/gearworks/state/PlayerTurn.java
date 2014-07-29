@@ -38,6 +38,7 @@ public class PlayerTurn implements State {
 		}
 		
 		StartTurn msg = new StartTurn();
+		msg.turnsLeft = Game.TURNS_TO_WIN - instance.turncount();
 
 		for(Player pl : instance.players()){
 			msg.active = (instance.activePlayer() == pl);

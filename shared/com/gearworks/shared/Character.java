@@ -14,7 +14,8 @@ import com.gearworks.shared.Player.Team;
 
 public class Character extends Entity {
 	public static final int SNEAKER_RADIUS = 5;
-	public static final int NUM_MOVES = 5;
+	public static final int SNEAKER_MOVES = 5;
+	public static final int SEEKER_MOVES = 4;
 	
 	private Texture myTexture;
 	private Sprite mySprite;
@@ -27,13 +28,14 @@ public class Character extends Entity {
 		this.player = player;
 		if(player.team() == Player.Team.Seeker){
 			myTexture = new Texture(Gdx.files.internal("assets/seekerv2.png"));
+			moves_left = SEEKER_MOVES;
 		}else{
 			myTexture = new Texture(Gdx.files.internal("assets/sneaker.png"));
+			moves_left = SNEAKER_MOVES;
 		}
 		
 		mySprite = new Sprite(myTexture, 32, 32);
 		size(32, 32);
-		moves_left = NUM_MOVES;
 	}
 	
 	//Sets myCell
@@ -77,8 +79,28 @@ public class Character extends Entity {
 			moves_left--;
 		}
 		else{
-			moves_left = NUM_MOVES;
-			game.sendEndTurnMessage();													//hopefully the same type of non-error error
+			boolean shouldEndTurn = true;
+			
+			for(Character c : player.characters()){
+				if(c.moves_left > 0){
+					shouldEndTurn = false;
+					break;
+				}
+			}
+			
+			if(shouldEndTurn){
+				game.sendEndTurnMessage();	//hopefully the same type of non-error error
+			}
+			
+		}
+	}
+	
+	//Needed to have this so we can call it when the start turn message is recieved. this is so that moves get reset when player presses space also
+	public void resetMoves(){
+		if(player.team() == Player.Team.Seeker){
+			moves_left = SEEKER_MOVES;
+		}else{
+			moves_left = SNEAKER_MOVES;
 		}
 	}
 	

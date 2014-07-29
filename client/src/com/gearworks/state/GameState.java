@@ -51,8 +51,6 @@ public class GameState implements State {
 		Array<Vector2> visibleCells = game.level().calculateLighting(game.player());
 		Vector2[] visibleArray = visibleCells.toArray(Vector2.class);
 		game.level().calculateHiddenCells(visibleArray);
-
-		System.out.println("[GameState::onEnter]");
 	}
 
 	@Override

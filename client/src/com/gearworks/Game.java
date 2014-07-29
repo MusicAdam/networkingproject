@@ -182,8 +182,7 @@ public class Game implements ApplicationListener {
 		playButton.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
-			System.out.println("Clicked! Is checked: " + playButton.isChecked());
-			playButton.setText("Good job!");
+			playButton.setText("Connecting...");
 			sm.setState(new ConnectState());
 			stage.dispose();
 			}
@@ -215,7 +214,6 @@ public class Game implements ApplicationListener {
 	        
 	        camera.viewportWidth = viewport.width;
 	        camera.viewportHeight = viewport.height;
-	        System.out.println("UPDATE VIEWPORT");
 		}
 		
 

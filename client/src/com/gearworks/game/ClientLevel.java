@@ -16,15 +16,11 @@ public class ClientLevel extends Level {
 
 	
 	public void visibleEnemies(Vector2[] enemies){
-		System.out.println("[ClientLevel] Setting visible enemies:");
-		System.out.println("\tEnemy Characters: " + game.enemy().characters().size);
 		if(game.enemy().characters().size != 0){
-			System.out.println("\tDeleting character");
 			for(Character c : game.enemy().characters()){
 				game.destroy(c);
 			}
 			game.enemy().clearCharacters();
-			System.out.println("\tEnemy Characters (After prune): " + game.enemy().characters().size);
 		}
 			
 		visibleEnemies = enemies;
@@ -72,7 +68,6 @@ public class ClientLevel extends Level {
 		
 		for(Vector2 cell : visibleEnemies){
 			if(!hiddenCells.contains(cell, false)){
-				System.out.println("Spawning enemies");
 				Character c = (Character)game.spawn(new Character(game.enemy(), game));
 				c.tile((int)cell.x, (int)cell.y);
 				game.enemy().addCharacter(c);

@@ -4,6 +4,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.game.ClientLevel;
 import com.gearworks.shared.*;
+import com.gearworks.shared.Character;
+import com.gearworks.shared.Player.Team;
 import com.gearworks.state.ConnectState;
 
 public class ClientListener extends Listener{
@@ -25,7 +27,6 @@ public class ClientListener extends Listener{
 	
 	@Override
 	public void connected(Connection connection){
-		System.out.println("Connected");
 	}
 	
 	public void received (Connection connection, Object object){	
@@ -45,6 +46,11 @@ public class ClientListener extends Listener{
 			
 			if(msg.active){
 				game.setActive();
+				for(Character c : game.player().characters()){
+					c.resetMoves();
+				}
+				System.out.println("----------------");
+				System.out.println("Turns left: " + msg.turnsLeft);
 			}else{
 				game.setInactive();
 			}
@@ -57,6 +63,12 @@ public class ClientListener extends Listener{
 			player.team(msg.team);
 			
 			game.player(player);
+			
+			if(game.player().team() == Team.Sneaker){
+				System.out.println("You are the sneaker!");
+			}else{
+				System.out.println("You are the seeker!");
+			}
 			
 			((ConnectState)game.state()).mapName(msg.mapName);
 			

@@ -47,7 +47,6 @@ public class ConnectState implements State {
 			}
 		}else{
 			if(mapName != null){
-				System.out.println("Creating level");
 				game.level(new ClientLevel(game));
 				game.level().load(mapName);
 			}

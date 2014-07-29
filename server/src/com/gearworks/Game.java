@@ -40,7 +40,7 @@ public class Game implements ApplicationListener {
 	public static final float 	ASPECT_RATIO = (float)V_WIDTH/(float)V_HEIGHT;
 	public static final int 	SCALE = 1;
 	public static final float 	ZOOM = 5;
-	public static final int TURNS_TO_WIN = 15; //number of turns sneaker must evade for to win
+	public static final int TURNS_TO_WIN = 10; //number of turns sneaker must evade for to win
 	
 	public static final float STEP = 1 / 60f;
 	private float accum;
@@ -61,7 +61,7 @@ public class Game implements ApplicationListener {
 	private Array<ServerPlayer> players; 				//All currently connected players
 	private Array<Instance> instances;					//This is a list of all the active games
 	private Queue<ServerPlayer> removePlayerQueue;		//Disconnected players waiting to be cleaned
-	private Queue<Message> messageQueue;				//Guess LEL
+	private Queue<Message> messageQueue;				//Guess LEL <- Super helpful
 	private SpriteBatch batch;
 	private ShapeRenderer renderer;
 	

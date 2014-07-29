@@ -7,6 +7,7 @@ import com.gearworks.game.ServerCharacter;
 import com.gearworks.game.ServerPlayer;
 import com.gearworks.shared.Character;
 import com.gearworks.shared.EndGame;
+import com.gearworks.shared.Player.Team;
 
 public class ProcessTurn implements State{
 	public Instance instance;
@@ -40,11 +41,19 @@ public class ProcessTurn implements State{
 			i++;
 		}
 		
+		if(instance.activePlayer().team() == Team.Seeker) //Only increment turn count when both players have moved, this will indicate a full turn
+			instance.turncount(instance.turncount() + 1);
+		
 		ServerPlayer winner = game.checkVictory(instance);
 		
 		if(winner != null){
 			//that player wins.
 			winner.connection().sendTCP(new EndGame("You win!!"));
+			if(instance.players()[0] == winner){
+				instance.players()[1].connection().sendTCP(new EndGame("You Lose!!"));
+			}else{
+				instance.players()[0].connection().sendTCP(new EndGame("You Lose!!"));				
+			}
 			return;
 		}
 		
@@ -55,7 +64,6 @@ public class ProcessTurn implements State{
 			instance.activePlayer(instance.players()[0]);
 		}
 		
-		instance.turncount(instance.turncount() + 1);
 		instance.sm().setState(new PlayerTurn(instance)); //sends new PlayerTurn message
 	}
 

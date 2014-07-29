@@ -15,7 +15,6 @@ import com.gearworks.shared.Character;
 /** An instance is the representation of a game in which two players have been matched */
 public class Instance extends Listener{
 	
-	public static final int NUM_TURNS	=	10;	//Total number of turns in the game
 	public static final int NUM_ROUNDS	=	3;	//Total number of rounds. A round = each player has a chance to be seeker & sneaker
 	
 	public Game game;
