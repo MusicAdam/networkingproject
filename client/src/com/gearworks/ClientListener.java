@@ -54,14 +54,14 @@ public class ClientListener extends Listener{
 			ConnectMessage msg = (ConnectMessage)object;
 			Player player = new Player(connection);
 			player.instanceId(msg.instanceId);
+			player.team(msg.team);
 			
 			game.player(player);
 			
+			((ConnectState)game.state()).mapName(msg.mapName);
+			
 			//Send the message back to complete handshake
 			connection.sendTCP(msg);
-		}else if(object instanceof Message){
-			///Handle elsewhere
-			game.queueMessage((Message)object);
 		}
 	}
 

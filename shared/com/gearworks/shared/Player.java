@@ -17,7 +17,6 @@ public class Player {
 							  	//or sneaking = false and you are the controlling the seekers
 	private int 	score;		//fairly obvious, keeps track of score
 	protected boolean active;		//This keeps track of what player is active aka who's turn it is
-	protected boolean ready;			//True when InitRoundMessage is processed
 	private int 	instanceId;			//Unique instace id assigned by the server once a connection has been made
 	protected Array<Character>	characters;	//The player's characters.
 	protected Connection connection;
@@ -51,8 +50,6 @@ public class Player {
 	public void clearCharacters(){ characters.clear(); }
 	public void removeCharacter(Character c){ characters.removeValue(c, true); }
 	public Connection connection(){return connection;}
-	public void ready(boolean r){ ready = r; }
-	public boolean ready(){ return ready; }
 
 	public int score() {
 		return score;

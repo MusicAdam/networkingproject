@@ -17,7 +17,6 @@ import com.gearworks.shared.Entity;
 import com.gearworks.shared.Player;
 
 //Server enters this state after it has been initialized
-//State is responsible for ensuring players are properly connected.
 public class InstanceInitState implements State {
 	private static int ID = 1;
 	private Instance  instance;
@@ -32,8 +31,7 @@ public class InstanceInitState implements State {
 
 	@Override
 	public void update(Game game) {
-		System.out.println("Calling:");
-		instance.sm().setState(new InitRoundState(instance, 1));
+		instance.sm().setState(new PlayerTurn(instance));
 	}
 
 	@Override
@@ -41,12 +39,17 @@ public class InstanceInitState implements State {
 		//Generate connect messages for client
 		ConnectMessage connectMessage = new ConnectMessage();
 		connectMessage.instanceId = instance.id();
+		connectMessage.mapName = instance.level().file();
+		connectMessage.team = Player.Team.Sneaker;
 		
 		instance.players()[0].team(Player.Team.Sneaker);
 		instance.players()[0].connection().sendTCP(connectMessage);
-
+		connectMessage.team = Player.Team.Seeker;
 		instance.players()[1].team(Player.Team.Seeker);
 		instance.players()[1].connection().sendTCP(connectMessage);
+		
+		//Create the characters server side
+		instance.spawnPlayerCharacters();
 		
 		System.out.println("[InstanceInitState::onEnter]");
 	}
@@ -62,7 +65,7 @@ public class InstanceInitState implements State {
 
 	@Override
 	public boolean canExitState(Game game) {
-		return instance.clientsConnected();
+		return instance.clientsReady();
 	}
 	
 	@Override

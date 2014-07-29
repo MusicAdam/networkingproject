@@ -95,7 +95,6 @@ public class Game implements ApplicationListener {
 		kryo.register(Vector2[].class);
 		kryo.register(ArrayIterable.class);
 		kryo.register(Vector2.class);
-		kryo.register(InitRoundMessage.class);
 		
 		server.start();
 		try {
@@ -314,14 +313,14 @@ public class Game implements ApplicationListener {
 	
 	//Remove a player from the server, this means remove from idlePlayers, players, and end any instance currently running with the player
 	private void removePlayer(ServerPlayer pl){
+		players.removeValue(pl, false);
+		idlePlayers.removeValue(pl, false);
+		
 		Instance inst = findInstanceByPlayer(pl);
-	
+		
 		if(inst != null){
 			inst.playerDisconnected(pl);
 		}
-		
-		players.removeValue(pl, false);
-		idlePlayers.removeValue(pl, false);
 		
 		instances.removeValue(inst, true);
 	}

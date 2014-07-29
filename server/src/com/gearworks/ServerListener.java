@@ -43,14 +43,13 @@ public class ServerListener extends Listener{
 			Instance instance = game.getInstance(msg.instanceId);
 			Player pl = instance.getPlayerByConnection(connection);
 			pl.instanceId(msg.instanceId);
-		}else if (object instanceof EndTurn){
+		}
+		
+		if (object instanceof EndTurn){
 			
 			EndTurn endt = (EndTurn)object;
 			game.addToMessageQueue(endt);
 			
-		}else if (object instanceof InitRoundMessage){
-			ServerPlayer pl = game.findPlayerByConnection(connection);
-			pl.ready(true);
 		}
 	}
 }

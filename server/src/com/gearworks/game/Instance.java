@@ -6,32 +6,26 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gearworks.Game;
 import com.gearworks.shared.Player;
-import com.gearworks.shared.Player.Team;
 import com.gearworks.state.InstanceInitState;
 import com.gearworks.state.PlayerTurn;
-import com.gearworks.state.ValidateTurn;
+import com.gearworks.state.ProcessTurn;
 import com.gearworks.state.StateManager;
 import com.gearworks.shared.Character;
 
 /** An instance is the representation of a game in which two players have been matched */
 public class Instance extends Listener{
 	
-	public static final int NUM_TURNS		=	10;	//Total number of turns in the game
-	public static final int NUM_ROUNDS		=	3;	//Total number of rounds. A round = each player has a chance to be seeker & sneaker
-	public static final int SEEKER_MOVES	=	4; //Number of moves each seeker character gets
-	public static final int SNEAKER_MOVES	= 	5; //Number of moves the sneaker gets
-	public static final Team STARTING_TEAM  =   Team.Sneaker;	//Team which goes first
+	public static final int NUM_TURNS	=	10;	//Total number of turns in the game
+	public static final int NUM_ROUNDS	=	3;	//Total number of rounds. A round = each player has a chance to be seeker & sneaker
 	
 	public Game game;
 	
 	private ServerPlayer[] 		players;			//Array containing matched players.
 	private ServerPlayer 		activePlayer;		//The player whose turn it is.
-	private int	   			turncount;			//Number of turns that have passed since the current round began
-	private int				round;				//The current round
-	private int				id;					//Used to ID instance
+	private int	   		turncount;			//Number of turns that have passed since the current round began
+	private int			round;				//The current round
+	private int			id;					//Used to ID instance
 	private ServerLevel		level;				//Instance of the level we are on, used to validate poisitions and calculate vision
-	private int				movesLeft;			//The number of moves the active player has left
-	private String			mapName;			//Current map;
 	
 	private StateManager sm;				//Manages instance states:
 											//		InstanceInitState: 	sends out the ConnectMessage to inform players that the instance has been created serverside
@@ -42,14 +36,19 @@ public class Instance extends Listener{
 		this.id = id;
 		System.out.println("Instance id: " + id);
 		players 	= new ServerPlayer[]{p1, p2};
-		players[0].team(Team.Sneaker);
-		players[1].team(Team.Seeker);
+		turncount(0);
+		round(1);
+		
+		level = new ServerLevel(game);
+		level.load("assets/map1.tmx");
 		
 		sm = new StateManager(game);
-		sm().setState(new InstanceInitState(this));
 	}
 	
-	public void update(){		
+	public void update(){
+		if(sm.state() == null)
+			sm().setState(new InstanceInitState(this));
+		
 		sm.update();
 	}
 	
@@ -68,14 +67,8 @@ public class Instance extends Listener{
 	}
 	
 	//Returns true after both clients have completed the conection handshake
-	public boolean clientsConnected() {
+	public boolean clientsReady() {
 		return (players[0].instanceId() == id && players[1].instanceId() == id);
-	}
-	
-	
-	//Returns true after both clients have completed the round init handshake
-	public boolean clientsReady(){
-		return players[0].ready() && players[1].ready();
 	}
 	
 	public void spawnPlayerCharacters(){
@@ -111,7 +104,7 @@ public class Instance extends Listener{
 		//Update positions for active player
 		ServerPlayer pl = activePlayer();
 		
-		sm.setState(new ValidateTurn(this, moves));
+		sm.setState(new ProcessTurn(this, moves));
 	}
 
 	public int turncount() {
@@ -129,28 +122,4 @@ public class Instance extends Listener{
 	public void round(int round) {
 		this.round = round;
 	}
-	
-	public int movesLeft(){
-		return movesLeft;
-	}
-	
-	public void movesLeft(int ml){
-		movesLeft = ml;
-	}
-
-	public ServerPlayer getPlayerByTeam(Team startingTeam) {
-		if(players()[0].team() == startingTeam){
-			return players()[0];
-		}else{
-			return players()[1];
-		}
-	}
-	
-	public void mapName(String mapName){
-		this.mapName = mapName;
-	}
-	
-	public String mapName(){ return mapName; }
-	
-	public void level(ServerLevel level){ this.level = level; }
 }
