@@ -16,6 +16,22 @@ public class ClientLevel extends Level {
 
 	
 	public void visibleEnemies(Vector2[] enemies){
+		//This shouldn't need to be done, but delete all characters unless they are the player's
+		Array<Character> toRemove = new Array<Character>();
+		for(Entity e : game.entities()){
+			if(e instanceof Character){
+				Character c = (Character)e;
+				if(c.player() != game.player()){
+					toRemove.add(c);
+				}
+			}
+		}
+		
+		for(Character c : toRemove){
+			game.destroy(c);
+			c.player().removeCharacter(c);
+		}
+		
 		if(game.enemy().characters().size != 0){
 			for(Character c : game.enemy().characters()){
 				game.destroy(c);

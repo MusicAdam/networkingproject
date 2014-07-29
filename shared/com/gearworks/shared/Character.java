@@ -114,4 +114,6 @@ public class Character extends Entity {
 		b.end();
 	}
 	
+	
+	public Player player(){ return player; }
 }
